@@ -1,0 +1,434 @@
+/* Lain-themed category browsing experience */
+
+/* Category Page Styling */
+.category-title, 
+.category-list-title,
+.son-yazilar-title {
+    font-family: 'Share Tech Mono', monospace;
+    color: #00b8d4;
+    margin-bottom: 2rem;
+    position: relative;
+    padding-left: 1.5rem;
+    letter-spacing: 1px;
+    text-shadow: 0 0 5px rgba(0, 184, 212, 0.5);
+    overflow: visible;
+    display: inline-block;
+    /* Ensure text is visible */
+    opacity: 1;
+    visibility: visible;
+    min-height: 1.5em;
+}
+
+.category-title::before, 
+.category-list-title::before,
+.son-yazilar-title::before {
+    content: '>';
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: #33ff33;
+    animation: blink 1s infinite;
+    font-weight: bold;
+    opacity: 1 !important;
+    z-index: 10;
+}
+
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.category-card {
+    position: relative;
+    background-color: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(0, 184, 212, 0.3);
+    border-radius: 4px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 0 15px rgba(0, 184, 212, 0.1);
+}
+
+.category-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        to bottom,
+        rgba(0, 184, 212, 0.05) 0%,
+        rgba(0, 0, 0, 0) 20%,
+        rgba(0, 0, 0, 0) 80%,
+        rgba(0, 184, 212, 0.05) 100%
+    );
+    pointer-events: none;
+}
+
+.category-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.1),
+        rgba(0, 0, 0, 0.1) 1px,
+        transparent 1px,
+        transparent 2px
+    );
+    pointer-events: none;
+    opacity: 0.2;
+}
+
+.category-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(0, 184, 212, 0.7);
+    box-shadow: 0 5px 20px rgba(0, 184, 212, 0.2);
+}
+
+.category-card:hover .category-icon {
+    color: #00b8d4;
+    transform: scale(1.1);
+    text-shadow: 0 0 10px rgba(0, 184, 212, 0.7);
+}
+
+.category-icon {
+    font-size: 3rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+}
+
+.category-card h3 {
+    font-family: 'Share Tech Mono', monospace;
+    color: #f0f0f0;
+    margin-bottom: 0.5rem;
+    text-align: center;
+    font-size: 1.75rem;
+    transition: all 0.3s ease;
+}
+
+.category-card:hover h3 {
+    color: #00b8d4;
+    text-shadow: 0 0 8px rgba(0, 184, 212, 0.5);
+}
+
+.post-count {
+    font-family: 'Share Tech Mono', monospace;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.category-card:hover .post-count {
+    color: #33ff33;
+}
+
+.category-description {
+    color: rgba(255, 255, 255, 0.5);
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.category-card:hover .category-description {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* Son Yazılar styling */
+.son-yazilar-container {
+    margin-bottom: 3rem;
+}
+
+.son-yazilar-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.son-yazılar-card {
+    border: 1px solid rgba(0, 184, 212, 0.3);
+    box-shadow: 0 0 15px rgba(0, 184, 212, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.son-yazılar-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(to right, #00b8d4, #33ff33);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.son-yazılar-card:hover::before {
+    transform: scaleX(1);
+}
+
+.son-yazılar-header {
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 0.75rem;
+    border-bottom: 1px solid rgba(0, 184, 212, 0.2);
+}
+
+.son-yazılar-tag {
+    display: inline-block;
+    background-color: rgba(0, 184, 212, 0.1);
+    border: 1px solid rgba(0, 184, 212, 0.3);
+    color: #00b8d4;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.8rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 3px;
+}
+
+.son-yazılar-body {
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    position: relative;
+}
+
+.son-yazılar-body::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.1),
+        rgba(0, 0, 0, 0.1) 1px,
+        transparent 1px,
+        transparent 2px
+    );
+    pointer-events: none;
+    opacity: 0.1;
+}
+
+.son-yazılar-title {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    padding-left: 1rem;
+    position: relative;
+}
+
+.son-yazılar-title::before {
+    content: '>';
+    position: absolute;
+    left: 0;
+    color: #33ff33;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.son-yazılar-card:hover .son-yazılar-title::before {
+    opacity: 1;
+}
+
+.son-yazılar-title a {
+    color: #f0f0f0;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.son-yazılar-card:hover .son-yazılar-title a {
+    color: #00b8d4;
+    text-shadow: 0 0 5px rgba(0, 184, 212, 0.3);
+}
+
+.son-yazılar-meta {
+    font-family: 'Share Tech Mono', monospace;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.8rem;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.son-yazılar-meta span {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.son-yazılar-meta i {
+    color: #00b8d4;
+}
+
+.son-yazılar-content {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+    flex-grow: 1;
+}
+
+.read-more {
+    font-family: 'Share Tech Mono', monospace;
+    color: #00b8d4;
+    font-size: 0.9rem;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    position: relative;
+    transition: all 0.3s ease;
+    align-self: flex-start;
+    padding-left: 1rem;
+}
+
+.read-more::before {
+    content: '>';
+    position: absolute;
+    left: 0;
+    color: #33ff33;
+}
+
+.read-more i {
+    margin-left: 0.5rem;
+    transition: transform 0.3s ease;
+}
+
+.read-more:hover {
+    color: #33ff33;
+}
+
+.read-more:hover i {
+    transform: translateX(3px);
+}
+
+.post-pagination {
+    color: rgba(255, 255, 255, 0.4);
+    font-family: 'Share Tech Mono', monospace;
+    text-align: center;
+    margin-top: 2rem;
+    position: relative;
+}
+
+.post-pagination::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50%;
+    height: 1px;
+    background: linear-gradient(
+        to right,
+        transparent,
+        rgba(0, 184, 212, 0.5),
+        transparent
+    );
+}
+
+/* Typing effect overlay styles */
+.typing-effect-overlay {
+    background-color: transparent;
+}
+
+.typing-effect-overlay .typed-text {
+    white-space: nowrap;
+}
+
+.typing-effect-background {
+    background-color: rgba(0, 0, 0, 0.9) !important;
+}
+
+@media (max-width: 768px) {
+    .categories-grid,
+    .son-yazilar-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .category-card {
+        padding: 1rem;
+    }
+}
+
+body.js-loaded .category-title,
+body.js-loaded .category-list-title,
+body.js-loaded .son-yazilar-title,
+body.js-loaded .tags-title {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
+    color: var(--lain-primary) !important;
+}
+
+/* JavaScript yüklenirken başlıklar için fallback stil */
+.category-title[data-default-text],
+.category-list-title[data-default-text],
+.son-yazilar-title[data-default-text],
+.tags-title[data-default-text] {
+    min-height: 1.5em;
+}
+
+/* Her durumda ::before içeriklerinin görünür olmasını sağla */
+.category-title::before,
+.category-list-title::before,
+.son-yazilar-title::before,
+.tags-title::before {
+    opacity: 1 !important;
+    visibility: visible !important;
+    content: ">";
+    display: inline-block;
+    margin-right: 0.5em;
+    color: var(--lain-green);
+    animation: blink 1s infinite;
+}
+
+/* Yazı tipi overlay için ek stiller */
+.typing-effect-overlay {
+    position: relative;
+    display: inline-block;
+}
+
+.typing-effect-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background-color: var(--lain-bg);
+    z-index: 1;
+    transition: width 0.05s linear;
+}
+
+/* Konsol ekranındaki yazı tiplerinin terminal benzeri görünümü */
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+/* JavaScript devre dışı olduğunda fallback */
+.no-js .category-title,
+.no-js .category-list-title,
+.no-js .son-yazilar-title,
+.no-js .tags-title {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
+    color: var(--lain-primary) !important;
+} 

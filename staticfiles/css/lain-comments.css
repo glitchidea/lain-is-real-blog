@@ -1,0 +1,549 @@
+/* Lain-themed comments section styling */
+
+/* Comments container */
+.comments-section {
+    margin-top: 50px;
+    position: relative;
+    z-index: 3;
+}
+
+/* Section title */
+.comments-section .section-title {
+    font-family: 'Share Tech Mono', monospace;
+    color: #00b8d4;
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(0, 184, 212, 0.3);
+    position: relative;
+}
+
+.comments-section .section-title::before {
+    content: "> ";
+    color: #33ff33;
+    opacity: 0.8;
+}
+
+/* Comment form container */
+.comment-form-container {
+    margin-bottom: 40px;
+    background-color: rgba(0, 0, 0, 0.7);
+    border: 1px solid rgba(0, 184, 212, 0.3);
+    padding: 20px;
+    border-radius: 5px;
+    position: relative;
+    overflow: hidden;
+}
+
+.comment-form-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent 48%, rgba(0, 184, 212, 0.05) 50%, transparent 52%);
+    background-size: 4px 4px;
+    pointer-events: none;
+}
+
+.comment-form {
+    position: relative;
+    z-index: 3;
+}
+
+.comment-form .form-group {
+    margin-bottom: 15px;
+}
+
+.comment-form label {
+    display: block;
+    margin-bottom: 10px;
+    color: #e0e0e0;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 16px;
+}
+
+.comment-form textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid rgba(0, 184, 212, 0.3);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #e0e0e0;
+    font-family: 'Source Sans Pro', sans-serif;
+    resize: vertical;
+    min-height: 100px;
+    border-radius: 3px;
+    transition: all 0.3s ease;
+}
+
+.comment-form textarea:focus {
+    outline: none;
+    border-color: #00b8d4;
+    box-shadow: 0 0 10px rgba(0, 184, 212, 0.3);
+}
+
+.comment-form button {
+    background-color: transparent;
+    color: #00b8d4;
+    border: 1px solid #00b8d4;
+    padding: 8px 20px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.comment-form button::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 184, 212, 0.2), transparent);
+    transition: all 0.5s ease;
+}
+
+.comment-form button:hover {
+    background-color: rgba(0, 184, 212, 0.1);
+    color: #33ff33;
+    border-color: #33ff33;
+    box-shadow: 0 0 15px rgba(51, 255, 51, 0.2);
+}
+
+.comment-form button:hover::before {
+    left: 100%;
+}
+
+/* Login to comment */
+.login-to-comment {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.7);
+    border: 1px solid rgba(0, 184, 212, 0.3);
+    color: #aaa;
+    font-family: 'Share Tech Mono', monospace;
+    position: relative;
+    overflow: hidden;
+}
+
+.login-to-comment::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent 48%, rgba(0, 184, 212, 0.05) 50%, transparent 52%);
+    background-size: 4px 4px;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.login-to-comment p {
+    position: relative;
+    z-index: 2;
+}
+
+.login-to-comment a {
+    color: #00b8d4;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border-bottom: 1px dashed rgba(0, 184, 212, 0.5);
+}
+
+.login-to-comment a:hover {
+    color: #33ff33;
+    border-color: #33ff33;
+    text-shadow: 0 0 5px rgba(51, 255, 51, 0.3);
+}
+
+/* Comments list */
+.comments-list {
+    margin-top: 30px;
+}
+
+/* Comment styles */
+.comment {
+    display: flex;
+    margin-bottom: 30px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 184, 212, 0.2);
+    padding: 20px;
+    position: relative;
+}
+
+.comment::before {
+    content: "";
+    position: absolute;
+    width: 3px;
+    height: 100%;
+    left: 0;
+    top: 0;
+    background-color: #00b8d4;
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+}
+
+.comment:hover::before {
+    opacity: 1;
+}
+
+.comment-avatar {
+    width: 50px;
+    height: 50px;
+    margin-right: 15px;
+    overflow: hidden;
+    border-radius: 50%;
+    background-color: #4285F4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    color: white;
+    flex-shrink: 0;
+}
+
+.comment-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.comment-content {
+    flex: 1;
+}
+
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-family: 'Share Tech Mono', monospace;
+}
+
+.comment-author {
+    color: #e0e0e0;
+    margin: 0;
+    font-size: 16px;
+}
+
+.comment-date {
+    color: #aaa;
+    font-size: 12px;
+}
+
+.comment-text {
+    color: #ccc;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+/* Comment actions */
+.comment-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.reply-button, .delete-button {
+    background-color: transparent;
+    border: 1px solid rgba(0, 184, 212, 0.5);
+    color: #00b8d4;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    padding: 3px 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.reply-button:hover {
+    background-color: rgba(0, 184, 212, 0.1);
+    color: #33ff33;
+    border-color: #33ff33;
+}
+
+.delete-button {
+    border-color: rgba(255, 64, 64, 0.5);
+    color: #ff4040;
+}
+
+.delete-button:hover {
+    background-color: rgba(255, 64, 64, 0.1);
+    color: #ff6060;
+    border-color: #ff6060;
+}
+
+/* Reply form */
+.reply-form-container {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    background-color: rgba(0, 0, 0, 0.7);
+    border: 1px solid rgba(0, 184, 212, 0.2);
+    padding: 15px;
+    border-radius: 3px;
+}
+
+.reply-form .form-group {
+    margin-bottom: 10px;
+}
+
+.reply-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid rgba(0, 184, 212, 0.3);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #e0e0e0;
+    font-family: 'Source Sans Pro', sans-serif;
+    resize: vertical;
+    min-height: 80px;
+    border-radius: 3px;
+}
+
+.reply-form textarea:focus {
+    outline: none;
+    border-color: #00b8d4;
+    box-shadow: 0 0 8px rgba(0, 184, 212, 0.3);
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+}
+
+/* Replies */
+.replies {
+    margin-top: 20px;
+    margin-left: 30px;
+    padding-left: 20px;
+    border-left: 1px dashed rgba(0, 184, 212, 0.3);
+}
+
+.reply {
+    display: flex;
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(0, 184, 212, 0.1);
+    position: relative;
+}
+
+.reply::before {
+    content: "";
+    position: absolute;
+    width: 2px;
+    height: 100%;
+    left: 0;
+    top: 0;
+    background-color: #00b8d4;
+    opacity: 0.3;
+    transition: opacity 0.3s ease;
+}
+
+.reply:hover::before {
+    opacity: 0.7;
+}
+
+.comment-avatar.small {
+    width: 35px;
+    height: 35px;
+    font-size: 16px;
+}
+
+.reply-content {
+    flex: 1;
+}
+
+/* No comments state */
+.no-comments {
+    text-align: center;
+    padding: 40px 20px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 184, 212, 0.2);
+    color: #aaa;
+    font-family: 'Share Tech Mono', monospace;
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.no-comments::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent 48%, rgba(0, 184, 212, 0.05) 50%, transparent 52%);
+    background-size: 4px 4px;
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.no-comments p {
+    position: relative;
+    z-index: 2;
+}
+
+/* Author bio section */
+.post-author-bio {
+    margin: 50px 0;
+    position: relative;
+}
+
+.author-card {
+    display: flex;
+    background-color: rgba(0, 0, 0, 0.7);
+    border: 1px solid rgba(0, 184, 212, 0.3);
+    padding: 25px;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.author-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent 48%, rgba(0, 184, 212, 0.05) 50%, transparent 52%);
+    background-size: 4px 4px;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.author-avatar.large {
+    width: 80px;
+    height: 80px;
+    font-size: 36px;
+    margin-right: 25px;
+}
+
+.author-details {
+    flex: 1;
+}
+
+.author-details h2 {
+    color: #00b8d4;
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 24px;
+    position: relative;
+    display: inline-block;
+}
+
+.author-details h2::before {
+    content: "// ";
+    color: #33ff33;
+    opacity: 0.8;
+}
+
+.author-details p {
+    color: #ccc;
+    margin-bottom: 20px;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+.author-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.author-links a {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 12px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 184, 212, 0.5);
+    color: #00b8d4;
+    font-family: 'Share Tech Mono', monospace;
+    text-decoration: none;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.author-links a i {
+    margin-right: 8px;
+}
+
+.author-links a:hover {
+    background-color: rgba(0, 184, 212, 0.1);
+    color: #33ff33;
+    border-color: #33ff33;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 5px rgba(51, 255, 51, 0.2);
+}
+
+/* Related posts */
+.related-posts {
+    margin-top: 50px;
+    position: relative;
+}
+
+.related-posts .section-title {
+    font-family: 'Share Tech Mono', monospace;
+    color: #00b8d4;
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(0, 184, 212, 0.3);
+    position: relative;
+}
+
+.related-posts .section-title::before {
+    content: "> ";
+    color: #33ff33;
+    opacity: 0.8;
+}
+
+/* Media queries */
+@media (max-width: 768px) {
+    .comment {
+        flex-direction: column;
+    }
+    
+    .comment-avatar {
+        margin-bottom: 15px;
+        margin-right: 0;
+    }
+    
+    .comment-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .comment-date {
+        margin-top: 5px;
+    }
+    
+    .author-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .author-avatar.large {
+        margin-right: 0;
+        margin-bottom: 20px;
+    }
+    
+    .author-links {
+        justify-content: center;
+    }
+    
+    .post-share {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .share-label {
+        margin-bottom: 10px;
+    }
+} 

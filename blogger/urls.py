@@ -37,7 +37,7 @@ urlpatterns = [
     path('media-manager/', include('apps.media.urls')),
     
     # CKEditor URLs
-    path('ckeditor/', include('ckeditor_uploader.urls')),
+    path('ckeditor5/', include('django_ckeditor_5.urls')),
     
     # Sitemap
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),

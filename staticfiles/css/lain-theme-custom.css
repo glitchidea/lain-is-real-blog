@@ -1,0 +1,436 @@
+/* Custom Lain Theme corrections for specific sections */
+
+/* Featured Articles and Son Yazılar sections */
+.featured-grid,
+.posts-grid {
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Empty state containers */
+.empty-state, 
+[class*="No Posts Yet"],
+[class*="No Featured Posts Yet"],
+[class*="No Posts Found"] {
+  background-color: rgba(0, 0, 0, 0.7) !important;
+  border: 1px solid var(--lain-accent) !important;
+  box-shadow: 0 0 15px rgba(0, 184, 212, 0.3) !important;
+  color: var(--lain-accent) !important;
+  border-radius: 0 !important;
+  padding: 2rem !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 200px !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+/* All section titles */
+.section-title, 
+[class*="latest_posts"],
+[class*="View All"],
+[class*="Featured Article"],
+[class*="All Article"] {
+  color: var(--lain-accent) !important;
+  font-family: monospace, "Courier New", Courier !important;
+  text-transform: lowercase !important;
+  border-bottom: 1px solid rgba(0, 184, 212, 0.3) !important;
+  padding-bottom: 0.5rem !important;
+  position: relative !important;
+}
+
+/* View all link */
+[class*="View All"] {
+  color: var(--lain-green) !important;
+  font-size: 0.9rem !important;
+  transition: all 0.3s ease !important;
+}
+
+[class*="View All"]:hover {
+  text-shadow: 0 0 5px var(--lain-green) !important;
+}
+
+/* Search categories section - Left sidebar */
+.posts-container,
+.posts-filters,
+[class*="Categories"],
+[class*="Categories"] > div,
+.search-container,
+.filter-options,
+.filter-group {
+  background-color: rgba(0, 0, 0, 0.7) !important;
+  border: 1px solid var(--lain-accent) !important;
+  box-shadow: 0 0 15px rgba(0, 184, 212, 0.3) !important;
+  border-radius: 0 !important;
+  color: var(--lain-accent) !important;
+}
+
+/* Left sidebar container */
+.posts-filters {
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+/* Add glow effect to border */
+.posts-filters::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: transparent;
+  border: 1px solid var(--lain-accent);
+  border-radius: 0;
+  box-shadow: 0 0 15px rgba(0, 184, 212, 0.3);
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Terminal-style search and categories sidebar */
+.search-container {
+    position: relative;
+    border: 1px solid rgba(0, 184, 212, 0.3);
+    border-radius: 4px;
+    background-color: rgba(10, 10, 15, 0.7);
+    padding: 8px;
+    margin-bottom: 16px;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(0, 184, 212, 0.1);
+}
+
+.search-container::before {
+    content: "$ search-query";
+    position: absolute;
+    top: -20px;
+    left: 10px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    color: #00b8d4;
+    opacity: 0.7;
+}
+
+.search-container:focus-within {
+    border-color: #00b8d4;
+    box-shadow: 0 0 15px rgba(0, 184, 212, 0.2);
+}
+
+.search-container:focus-within::before {
+    content: "$ active-query";
+    color: #33ff33;
+}
+
+.search-container input[type="text"] {
+    background-color: rgba(10, 10, 15, 0.5);
+    border: none;
+    border-bottom: 1px solid rgba(0, 184, 212, 0.3);
+    color: #e0e0e0;
+    font-family: 'Share Tech Mono', monospace;
+    width: calc(100% - 40px);
+    padding: 8px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.search-container input[type="text"]:focus {
+    border-bottom-color: #00b8d4;
+    color: #ffffff;
+    text-shadow: 0 0 5px rgba(0, 184, 212, 0.5);
+}
+
+.search-container button {
+    background-color: transparent;
+    border: none;
+    color: #00b8d4;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.search-container button:hover {
+    color: #33ff33;
+    transform: scale(1.1);
+}
+
+/* Filter groups and category listings */
+.filter-group {
+    border: 1px solid rgba(0, 184, 212, 0.2);
+    border-radius: 4px;
+    background-color: rgba(10, 10, 15, 0.6);
+    margin-bottom: 16px;
+    padding: 12px;
+    position: relative;
+    overflow: hidden;
+}
+
+.filter-group::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #00b8d4, transparent);
+    opacity: 0.5;
+}
+
+.filter-group h3 {
+    color: #00b8d4;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 16px;
+    margin-top: 0;
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+    text-transform: lowercase;
+    border-bottom: 1px solid rgba(0, 184, 212, 0.2);
+    padding-bottom: 8px;
+}
+
+.filter-group ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.filter-group li {
+    margin-bottom: 8px;
+}
+
+.filter-group a {
+    color: #c0c0c0;
+    font-family: 'Share Tech Mono', monospace;
+    text-decoration: none;
+    display: block;
+    padding: 4px 8px;
+    transition: all 0.2s ease;
+    border-left: 2px solid transparent;
+}
+
+.filter-group a:hover,
+.filter-group a.active {
+    color: #ffffff;
+    background-color: rgba(0, 184, 212, 0.1);
+    border-left: 2px solid #00b8d4;
+    text-shadow: 0 0 5px rgba(0, 184, 212, 0.5);
+}
+
+.filter-group a.active {
+    color: #33ff33;
+}
+
+/* Badge styling for count */
+.filter-group .count {
+    display: inline-block;
+    background-color: rgba(0, 184, 212, 0.2);
+    color: #00b8d4;
+    font-size: 12px;
+    border-radius: 3px;
+    padding: 1px 6px;
+    margin-left: 6px;
+    font-family: 'Share Tech Mono', monospace;
+}
+
+.filter-group a:hover .count {
+    background-color: rgba(0, 184, 212, 0.3);
+    color: #ffffff;
+}
+
+/* Add scanlines to the sidebar like a terminal */
+.posts-filters::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        to bottom,
+        rgba(18, 16, 16, 0) 50%,
+        rgba(0, 0, 0, 0.1) 50%
+    );
+    background-size: 100% 4px;
+    z-index: -1;
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+/* Add left-side marker in active categories */
+.category-active {
+    position: relative;
+}
+
+.category-active::before {
+    content: ">";
+    position: absolute;
+    left: -10px;
+    color: #33ff33;
+    font-family: 'Share Tech Mono', monospace;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+/* Mobile responsiveness for the sidebar */
+@media (max-width: 768px) {
+    .search-container::before {
+        display: none;
+    }
+    
+    .filter-group {
+        border-width: 1px 0;
+        border-radius: 0;
+    }
+}
+
+/* Lain-style SVG icon enhancements for empty states */
+svg {
+  filter: drop-shadow(0 0 5px rgba(0, 184, 212, 0.5)) !important;
+}
+
+/* Fix for white background containers */
+.post-card, 
+.empty-state,
+[class*="Categories"] > div,
+[class*="Categories"],
+[class*="No Posts"],
+[class*="No Featured Posts"],
+[class*="No Posts Found"] {
+  background-color: rgba(0, 0, 0, 0.7) !important;
+  color: var(--lain-accent) !important;
+}
+
+/* Make white text elements visible */
+body, p, div, span {
+  color: #f0f0f0 !important;
+}
+
+/* Fix for the main area to have proper styling */
+.posts-container {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Terminal scanlines overlay for sidebar */
+.posts-filters {
+    position: relative;
+    overflow: hidden;
+}
+
+/* Create a pseudo-element for the scanlines effect */
+.posts-filters::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0),
+        rgba(0, 0, 0, 0) 50%,
+        rgba(0, 184, 212, 0.03) 50%,
+        rgba(0, 184, 212, 0.03)
+    );
+    background-size: 100% 4px;
+    opacity: 0.7;
+}
+
+/* Make sure elements in the sidebar are above the scanlines */
+.posts-filters > * {
+    position: relative;
+    z-index: 2;
+}
+
+/* Add subtle CRT flicker animation */
+@keyframes crt-flicker {
+    0% { opacity: 0.98; }
+    2% { opacity: 0.9; }
+    5% { opacity: 0.98; }
+    70% { opacity: 0.98; }
+    72% { opacity: 0.9; }
+    80% { opacity: 0.98; }
+    100% { opacity: 0.98; }
+}
+
+.posts-filters {
+    animation: crt-flicker 10s infinite linear;
+}
+
+/* Terminal-style selection colors for the sidebar */
+.posts-filters ::selection {
+    background-color: rgba(0, 184, 212, 0.3);
+    color: #ffffff;
+    text-shadow: 0 0 5px rgba(0, 184, 212, 0.8);
+}
+
+/* Add a subtle glowing border on the sidebar when hovering */
+.posts-container:hover .posts-filters {
+    border-right: 1px solid rgba(0, 184, 212, 0.1);
+    box-shadow: 5px 0 15px rgba(0, 184, 212, 0.05);
+}
+
+/* Specific styling for All Articles empty state */
+.posts-content .empty-state .lain-terminal {
+    background-color: rgba(0, 0, 0, 0.8); 
+    border: 1px solid #00b8d4;
+    box-shadow: 0 0 20px rgba(0, 184, 212, 0.4);
+}
+
+.posts-content .empty-state .terminal-content {
+    text-align: center;
+}
+
+/* Better alignment for connection-status header */
+.terminal-header span:first-child {
+    margin-left: 5px;
+    letter-spacing: 1px;
+}
+
+/* Add animated loading dots */
+.terminal-line:last-child .cursor {
+    animation: blink 1s infinite;
+}
+
+/* Turkish specific form headers - using classes instead of :contains */
+.form-header h1.profile-edit::after,
+.form-header h1.account-create::after,
+.form-header h1.login::after {
+    content: " //lain.nexus";
+    color: #33ff33;
+    font-size: 0.7em;
+    opacity: 0.7;
+}
+
+/* Terminal pagination styling */
+.pagination {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.7);
+    border: 1px solid rgba(0, 184, 212, 0.3);
+    display: inline-flex;
+    justify-content: center;
+    font-family: 'Share Tech Mono', monospace;
+}
+
+.pagination .current-page {
+    background-color: rgba(0, 184, 212, 0.2);
+    color: #33ff33;
+}
+
+.pagination a {
+    font-family: 'Share Tech Mono', monospace;
+}
+
+/* Fix for the form alignment */
+.form-container {
+    margin-top: 50px;
+    margin-bottom: 50px;
+} 

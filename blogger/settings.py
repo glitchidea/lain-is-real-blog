@@ -56,8 +56,7 @@ INSTALLED_APPS = [
     "allauth.account",
     "allauth.socialaccount",
     "debug_toolbar",
-    "ckeditor",
-    "ckeditor_uploader",
+    "django_ckeditor_5",
     
     # Project apps
     "apps.accounts",
@@ -293,71 +292,50 @@ LOGGING = {
 # CKEditor Ayarları
 CKEDITOR_UPLOAD_PATH = "uploads/"
 CKEDITOR_IMAGE_BACKEND = "pillow"
-CKEDITOR_THUMBNAIL_SIZE = (300, 300)
 CKEDITOR_RESTRICT_BY_USER = True
 CKEDITOR_BROWSE_SHOW_DIRS = True
 CKEDITOR_ALLOW_NONIMAGE_FILES = False  # Sadece görsel yükleyebilmek için
-# CKEditor 4.24.0 LTS ayarları
-CKEDITOR_JQUERY_URL = None
-CKEDITOR_FORCE_NATIVE_FILENAME = True
-CKEDITOR_BASEPATH = "/static/ckeditor/ckeditor/"
 
-CKEDITOR_CONFIGS = {
+# CKEditor 5 yapılandırması
+DJANGO_CKEDITOR_5_CONFIGS = {
     'default': {
-        'toolbar': 'Custom',
+        'toolbar': ['heading', '|', 'bold', 'italic', 'link',
+                   'bulletedList', 'numberedList', 'blockQuote', 'imageUpload', '|',
+                   'insertTable', 'mediaEmbed', 'undo', 'redo', '|',
+                   'code', 'codeBlock', '|',
+                   'fontBackgroundColor', 'fontColor', 'fontSize', 'fontFamily'],
+        'image': {
+            'toolbar': ['imageTextAlternative', 'imageStyle:alignLeft', 'imageStyle:full', 'imageStyle:alignRight'],
+            'styles': [
+                'full', 'alignLeft', 'alignRight',
+            ],
+        },
+        'table': {
+            'contentToolbar': [ 'tableColumn', 'tableRow', 'mergeTableCells' ],
+        },
+        'height': 500,
         'width': '100%',
-        'height': 400,
-        'toolbar_Custom': [
-            ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript'],
-            ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
-            ['Link', 'Unlink', 'Anchor'],
-            ['Image', 'Table', 'HorizontalRule', 'SpecialChar', 'CodeSnippet'],
-            ['Styles', 'Format', 'Font', 'FontSize'],
-            ['TextColor', 'BGColor'],
-            ['Maximize', 'ShowBlocks', 'Source']
-        ],
-        'extraPlugins': 'justify,liststyle,indent,codesnippet',
-        'codeSnippet_theme': 'monokai',
     },
     'blog_content': {
-        'toolbar': 'Full',
-        'width': '100%',
+        'toolbar': ['heading', '|', 'outdent', 'indent', '|', 'bold', 'italic', 'link', 'underline', '|',
+                 'bulletedList', 'numberedList', 'todoList', '|',
+                 'blockQuote', 'imageUpload', '|',
+                 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'highlight', '|',
+                 'alignment', 'insertTable', 'horizontalLine', 'pageBreak', '|',
+                 'sourceEditing', 'code', 'codeBlock', '|',
+                 'subscript', 'superscript', 'strikethrough', '|',
+                 'specialCharacters', 'mediaEmbed', 'htmlEmbed', '|',
+                 'undo', 'redo'],
+        'image': {
+            'toolbar': ['imageTextAlternative', 'imageStyle:alignLeft', 'imageStyle:full', 'imageStyle:alignRight'],
+            'styles': [
+                'full', 'alignLeft', 'alignRight',
+            ],
+        },
+        'table': {
+            'contentToolbar': [ 'tableColumn', 'tableRow', 'mergeTableCells' ]
+        },
         'height': 500,
-        'extraPlugins': ','.join([
-            'uploadimage',
-            'autolink',
-            'autoembed',
-            'embedsemantic',
-            'autogrow',
-            'widget',
-            'lineutils',
-            'dialog',
-            'dialogui',
-            'elementspath',
-            'justify',
-            'colorbutton',
-            'font',
-            'image2',
-            'tableresize',
-            'tableselection',
-            'tabletools',
-            'clipboard',
-            'codesnippet',
-        ]),
-        'removePlugins': 'resize',
-        'autoGrow_minHeight': 500,
-        'autoGrow_maxHeight': 1000,
-        'allowedContent': True,
-        'image2_alignClasses': ['image-left', 'image-center', 'image-right'],
-        'image2_captionedClass': 'image-captioned',
-        'stylesSet': [
-            {'name': 'Image Left', 'element': 'img', 'attributes': {'class': 'img-left'}},
-            {'name': 'Image Center', 'element': 'img', 'attributes': {'class': 'img-center'}},
-            {'name': 'Image Right', 'element': 'img', 'attributes': {'class': 'img-right'}},
-            {'name': 'Image Small', 'element': 'img', 'attributes': {'class': 'img-small'}},
-            {'name': 'Image Medium', 'element': 'img', 'attributes': {'class': 'img-medium'}},
-            {'name': 'Image Large', 'element': 'img', 'attributes': {'class': 'img-large'}},
-            {'name': 'Image Full', 'element': 'img', 'attributes': {'class': 'img-full'}},
-        ],
+        'width': '100%',
     }
 }
