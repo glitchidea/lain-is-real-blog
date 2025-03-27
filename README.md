@@ -36,8 +36,8 @@ A neural interface for digital consciousness - a Django-powered blog platform wi
 
 1. Clone the repository
    ```
-   git clone https://github.com/glitchidea/lain-blog.git
-   cd lain-blog
+   git clone https://github.com/glitchidea/lain-is-real-blog.git
+   cd lain-is-real-blog
    ```
 
 2. Create and activate a virtual environment
