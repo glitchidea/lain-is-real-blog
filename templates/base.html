@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Lain Nexus | Cybersecurity in the Wired{% endblock %}</title>
+    {% load static %}
+    <!-- Favicon links -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/site/favicon/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/site/favicon/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/site/favicon/favicon-16x16.png' %}">
+    <link rel="icon" type="image/x-icon" href="{% static 'images/site/favicon.ico' %}">
+    <link rel="manifest" href="{% static 'images/site/site.webmanifest' %}">
+    <!-- Meta tags for SEO -->
+    <meta name="description" content="A specialized blog on cybersecurity, software development, penetration testing, and GitHub resources.">
+    <meta name="keywords" content="cybersecurity, coding, programming, pentesting, ethical hacking, github, software development, lain, wired">
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'css/lain-theme.css' %}">
+    <link rel="stylesheet" href="{% static 'css/lain-theme-custom.css' %}">
+    <link rel="stylesheet" href="{% static 'css/lain-forms.css' %}">
+    <link rel="stylesheet" href="{% static 'css/lain-profile.css' %}">
+    <link rel="stylesheet" href="{% static 'css/lain-blog.css' %}">
+    <link rel="stylesheet" href="{% static 'css/lain-comments.css' %}">
+    <link rel="stylesheet" href="{% static 'css/lain-categories.css' %}">
+    <link rel="stylesheet" href="{% static 'css/lain-tags.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Source+Sans+Pro:wght@300;400;600&family=VT323&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    {% block extra_css %}{% endblock %}
+    <script>
+        // Remove no-js class if JavaScript is enabled
+        document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+    </script>
+</head>
+<body class="no-js">
+    <header class="site-header">
+        <div class="container">
+            <nav class="main-nav">
+                <a href="{% url 'home' %}" class="logo">
+                    <img src="{% static 'images/site/logo.png' %}" alt="Lain Nexus" class="site-logo">
+                    <span class="site-title">lain_nexus</span>
+                </a>
+                <div class="nav-links">
+                    <a href="{% url 'home' %}">home</a>
+                    <a href="{% url 'blog:categories' %}">categories</a>
+                    <a href="{% url 'blog:tags' %}">tags</a>
+                    <a href="{% url 'blog:about' %}">about</a>
+                </div>
+                <div class="nav-actions">
+                    {% if user.is_authenticated %}
+                        {% comment %}
+                        {% if user.is_superuser %}
+                            <a href="{% url 'blog:new_post' %}" class="btn btn-primary">
+                                <i class="fas fa-pen"></i> New Post
+                            </a>
+                        {% endif %}
+                        {% endcomment %}
+                        <a href="{% url 'accounts:profile' %}" class="profile-link">
+                            {% if user.profile.avatar %}
+                            <img src="{{ user.profile.avatar.url }}" alt="{{ user.username }}">
+                            {% else %}
+                            <i class="fas fa-user-circle"></i>
+                            {% endif %}
+                            <span>{{ user.username }}</span>
+                        </a>
+                        <a href="{% url 'accounts:logout' %}" class="btn btn-outline">logout</a>
+                    {% else %}
+                        <a href="{% url 'accounts:login' %}" class="btn btn-outline">login</a>
+                        <a href="{% url 'accounts:register' %}" class="btn btn-primary">register</a>
+                    {% endif %}
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                <div class="message message-{{ message.tags }}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            {% block content %}
+            {% endblock %}
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>//about</h3>
+                    <p>A specialized blog platform connected to the Wired, focusing on cybersecurity, software development, penetration testing, and GitHub resources.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>//categories</h3>
+                    <ul>
+                        <li><a href="#">cybersecurity</a></li>
+                        <li><a href="#">programming</a></li>
+                        <li><a href="#">penetration_testing</a></li>
+                        <li><a href="#">github_projects</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>//connect</h3>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-discord"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; {% now "Y" %} Lain Nexus. All connections are monitored.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/lain-effects.js' %}"></script>
+    <script src="{% static 'js/lain-empty-state.js' %}"></script>
+    <script src="{% static 'js/lain-sidebar.js' %}"></script>
+    <script src="{% static 'js/lain-form-effects.js' %}"></script>
+    <script src="{% static 'js/lain-profile.js' %}"></script>
+    <script src="{% static 'js/lain-blog.js' %}"></script>
+    <script src="{% static 'js/lain-categories.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html> 

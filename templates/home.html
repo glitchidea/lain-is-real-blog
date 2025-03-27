@@ -1,0 +1,277 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home - Lain Nexus{% endblock %}
+
+{% block content %}
+<section class="hero lain-hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <h1 class="glitch-text" data-text="Welcome to the Wired">Welcome to the Wired</h1>
+        <p class="hero-subtitle">A neural network of thoughts, ideas, and connections</p>
+        <div class="hero-buttons">
+            <a href="{% url 'blog:post_list' %}" class="btn btn-large btn-outline">View All Posts</a>
+            {% comment %}
+            {% if user.is_superuser %}
+            <a href="{% url 'blog:new_post' %}" class="btn btn-large btn-primary">
+                <i class="fas fa-pen"></i> New Post
+            </a>
+            {% endif %}
+            {% endcomment %}
+        </div>
+    </div>
+</section>
+
+<style>
+.lain-hero {
+    position: relative;
+    height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: url('{% static "images/site/hero/lain-background.jpg" %}') no-repeat center center;
+    background-size: cover;
+    overflow: hidden;
+    color: #fff;
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 1;
+}
+
+.hero-overlay::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.2),
+        rgba(0, 0, 0, 0.2) 1px,
+        transparent 1px,
+        transparent 2px
+    );
+    pointer-events: none;
+    z-index: 2;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 3;
+    padding: 2rem;
+    max-width: 800px;
+}
+
+.hero-content h1 {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+    font-family: 'Share Tech Mono', monospace;
+    color: #00b8d4;
+    text-shadow: 0 0 15px rgba(0, 184, 212, 0.8);
+    position: relative;
+}
+
+.glitch-text {
+    position: relative;
+    animation: glitch-anim 2s infinite linear alternate-reverse;
+}
+
+.glitch-text::before,
+.glitch-text::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.glitch-text::before {
+    left: 2px;
+    text-shadow: -1px 0 #ff00a5;
+    clip: rect(24px, 550px, 90px, 0);
+    animation: glitch-anim-1 5s infinite linear alternate-reverse;
+}
+
+.glitch-text::after {
+    left: -2px;
+    text-shadow: 2px 0 #33ff33;
+    clip: rect(85px, 550px, 140px, 0);
+    animation: glitch-anim-2 4s infinite linear alternate-reverse;
+}
+
+.hero-subtitle {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-family: 'Share Tech Mono', monospace;
+}
+
+@keyframes glitch-anim {
+    0% { transform: translate(0); }
+    20% { transform: translate(-1px, 1px); }
+    40% { transform: translate(-1px, -1px); }
+    60% { transform: translate(1px, 1px); }
+    80% { transform: translate(1px, -1px); }
+    100% { transform: translate(0); }
+}
+
+@keyframes glitch-anim-1 {
+    0% { clip: rect(39px, 9999px, 106px, 0); }
+    20% { clip: rect(25px, 9999px, 55px, 0); }
+    40% { clip: rect(101px, 9999px, 140px, 0); }
+    60% { clip: rect(66px, 9999px, 126px, 0); }
+    80% { clip: rect(85px, 9999px, 107px, 0); }
+    100% { clip: rect(32px, 9999px, 94px, 0); }
+}
+
+@keyframes glitch-anim-2 {
+    0% { clip: rect(16px, 9999px, 86px, 0); }
+    20% { clip: rect(5px, 9999px, 55px, 0); }
+    40% { clip: rect(81px, 9999px, 120px, 0); }
+    60% { clip: rect(46px, 9999px, 96px, 0); }
+    80% { clip: rect(65px, 9999px, 87px, 0); }
+    100% { clip: rect(12px, 9999px, 74px, 0); }
+}
+
+@media (max-width: 768px) {
+    .lain-hero {
+        height: 60vh;
+    }
+    
+    .hero-content h1 {
+        font-size: 2.5rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.2rem;
+    }
+}
+</style>
+
+<section class="featured-posts">
+    <div class="section-header">
+        <h2 class="category-list-title" data-default-text="featured_articles">featured_articles</h2>
+        <a href="{% url 'blog:post_list' %}" class="view-all">View All</a>
+    </div>
+    
+    <div class="featured-grid">
+        {% for post in featured_posts %}
+        <article class="post-card featured">
+            <div class="post-image">
+                {% if post.featured_image %}
+                <img src="{{ post.featured_image.url }}" alt="{{ post.title }}">
+                {% else %}
+                <div class="placeholder-image">
+                    <i class="fas fa-newspaper"></i>
+                </div>
+                {% endif %}
+                {% if post.categories.first %}
+                <a href="{% url 'blog:category' post.categories.first.slug %}" class="category-badge">{{ post.categories.first.name }}</a>
+                {% endif %}
+            </div>
+            <div class="post-content">
+                <h3 class="post-title">
+                    <a href="{% url 'blog:post_detail' post.slug %}">{{ post.title }}</a>
+                </h3>
+                <div class="post-meta">
+                    <span class="post-date">
+                        <i class="far fa-calendar"></i> {{ post.created_at|date:"M d, Y" }}
+                    </span>
+                    <span class="post-author">
+                        <i class="far fa-user"></i> {{ post.author.get_full_name|default:post.author.username }}
+                    </span>
+                </div>
+                <p class="post-excerpt">{{ post.excerpt }}</p>
+                <a href="{% url 'blog:post_detail' post.slug %}" class="read-more">
+                    Read More <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </article>
+        {% empty %}
+        <div class="empty-state">
+            <i class="fas fa-newspaper empty-icon"></i>
+            <h3>No Featured Posts Yet</h3>
+            <p>Check back soon for featured content or browse our latest posts below.</p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="latest-posts">
+    <div class="section-header">
+        <h2 class="son-yazilar-title" data-default-text="latest_posts">latest_posts</h2>
+        <div class="section-actions">
+            <a href="{% url 'blog:post_list' %}" class="view-all">View All</a>
+        </div>
+    </div>
+    
+    <div class="son-yazilar-grid">
+        {% for post in latest_posts %}
+        <article class="son-yazılar-card">
+            <div class="son-yazılar-header">
+                {% if post.categories.first %}
+                <a href="{% url 'blog:category' post.categories.first.slug %}" class="son-yazılar-tag">{{ post.categories.first.name }}</a>
+                {% endif %}
+            </div>
+            <div class="son-yazılar-body">
+                <h3 class="son-yazılar-title">
+                    <a href="{% url 'blog:post_detail' post.slug %}">{{ post.title }}</a>
+                </h3>
+                
+                <div class="son-yazılar-meta">
+                    <span><i class="far fa-calendar"></i> {{ post.created_at|date:"M d, Y" }}</span>
+                    <span><i class="far fa-user"></i> {{ post.author.username }}</span>
+                </div>
+                
+                <div class="son-yazılar-content">
+                    <p>{{ post.excerpt|truncatechars:120 }}</p>
+                </div>
+                
+                <a href="{% url 'blog:post_detail' post.slug %}" class="read-more">
+                    Read More <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+    
+    <div class="post-pagination">
+        Page 1
+    </div>
+</section>
+
+<section class="categories-section">
+    <div class="section-header">
+        <h2 class="category-list-title" data-default-text="Explore Categories">Explore Categories</h2>
+    </div>
+    
+    <div class="categories-grid">
+        {% for category in categories %}
+        <a href="{% url 'blog:category' category.slug %}" class="category-card">
+            <span class="category-icon">
+                <i class="{% if category.icon %}{{ category.icon }}{% else %}fas fa-folder{% endif %}"></i>
+            </span>
+            <h3>{{ category.name }}</h3>
+            <span class="post-count">{{ category.posts_count }} articles</span>
+        </a>
+        {% empty %}
+        <div class="empty-state">
+            <i class="fas fa-folder-open empty-icon"></i>
+            <h3>No Categories Yet</h3>
+            <p>Categories will appear here once they are created.</p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %} 

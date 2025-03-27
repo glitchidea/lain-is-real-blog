@@ -1,0 +1,234 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Profile | Lain Nexus{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="profile-stats {% if not user.is_superuser %}single-stat{% endif %}">
+        {% if user.is_superuser %}
+        <div class="profile-stat">
+            <div class="number">{{ published_post_count }}</div>
+            <div class="label">Published Posts</div>
+        </div>
+        <div class="profile-stat">
+            <div class="number">{{ draft_post_count }}</div>
+            <div class="label">Drafts</div>
+        </div>
+        {% endif %}
+        <div class="profile-stat {% if not user.is_superuser %}single-profile-stat{% endif %}">
+            <div class="number">{{ comment_count }}</div>
+            <div class="label">Comments</div>
+        </div>
+    </div>
+    
+    <a href="{% url 'accounts:profile_edit' %}" class="profile-edit-btn">
+        <i class="fas fa-user-edit"></i> edit profile
+    </a>
+    
+    <div class="profile-tabs">
+        {% if user.is_superuser %}
+        <a href="#tab-all-posts" class="profile-tab active" data-tab="tab-all-posts">
+            All Posts
+        </a>
+        <a href="#tab-published" class="profile-tab" data-tab="tab-published">
+            Published
+        </a>
+        <a href="#tab-drafts" class="profile-tab" data-tab="tab-drafts">
+            Drafts
+        </a>
+        <a href="#tab-comments" class="profile-tab" data-tab="tab-comments">
+            Comments
+        </a>
+        {% else %}
+        <a href="#tab-comments" class="profile-tab active" data-tab="tab-comments">
+            Comments
+        </a>
+        {% endif %}
+    </div>
+
+    <div class="tab-content">
+        {% if user.is_superuser %}
+        <!-- All Posts Tab -->
+        <div id="tab-all-posts" class="tab-pane active">
+            <h2 class="profile-articles-header">My Posts</h2>
+            
+            {% if posts %}
+            <div class="profile-articles">
+                {% for post in posts %}
+                <div class="profile-article">
+                    <h3 class="profile-article-title">
+                        <a href="{% url 'blog:post_detail' post.slug %}">{{ post.title }}</a>
+                    </h3>
+                    
+                    <div class="profile-article-meta">
+                        {% if post.status == 'published' %}
+                        <span>
+                            <i class="fas fa-check-circle"></i> Published
+                        </span>
+                        {% else %}
+                        <span>
+                            <i class="fas fa-edit"></i> Draft
+                        </span>
+                        {% endif %}
+                        
+                        <span><i class="fas fa-calendar"></i> {{ post.created_at|date:"d M Y" }}</span>
+                        
+                        {% if post.status == 'published' %}
+                        <span><i class="fas fa-eye"></i> {{ post.views_count }} views</span>
+                        {% endif %}
+                    </div>
+                    
+                    <a href="{% url 'blog:post_detail' post.slug %}" class="view-article">
+                        view <i class="fas fa-chevron-right"></i>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <i class="fas fa-feather-alt"></i>
+                </div>
+                <h3>You don't have any posts yet</h3>
+                <p>Start creating your first post!</p>
+            </div>
+            {% endif %}
+        </div>
+        
+        <!-- Published Posts Tab -->
+        <div id="tab-published" class="tab-pane">
+            <h2 class="profile-articles-header">Published Posts</h2>
+            
+            {% if published_post_count > 0 %}
+            <div class="profile-articles">
+                {% for post in posts %}
+                {% if post.status == 'published' %}
+                <div class="profile-article">
+                    <h3 class="profile-article-title">
+                        <a href="{% url 'blog:post_detail' post.slug %}">{{ post.title }}</a>
+                    </h3>
+                    
+                    <div class="profile-article-meta">
+                        <span><i class="fas fa-calendar"></i> {{ post.published_at|date:"d M Y" }}</span>
+                        <span><i class="fas fa-eye"></i> {{ post.views_count }} views</span>
+                    </div>
+                    
+                    <a href="{% url 'blog:post_detail' post.slug %}" class="view-article">
+                        view <i class="fas fa-chevron-right"></i>
+                    </a>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <i class="fas fa-newspaper"></i>
+                </div>
+                <h3>You don't have any published posts yet</h3>
+                <p>Publish your draft posts or create a new one!</p>
+            </div>
+            {% endif %}
+        </div>
+        
+        <!-- Draft Posts Tab -->
+        <div id="tab-drafts" class="tab-pane">
+            <h2 class="profile-articles-header">Draft Posts</h2>
+            
+            {% if draft_post_count > 0 %}
+            <div class="profile-articles">
+                {% for post in posts %}
+                {% if post.status == 'draft' %}
+                <div class="profile-article">
+                    <h3 class="profile-article-title">
+                        <a href="{% url 'accounts:user_drafts' %}">{{ post.title }}</a>
+                    </h3>
+                    
+                    <div class="profile-article-meta">
+                        <span><i class="fas fa-edit"></i> Draft</span>
+                        <span><i class="fas fa-calendar"></i> {{ post.created_at|date:"d M Y" }}</span>
+                    </div>
+                    
+                    <a href="{% url 'accounts:user_drafts' %}" class="view-article">
+                        view <i class="fas fa-chevron-right"></i>
+                    </a>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <i class="fas fa-edit"></i>
+                </div>
+                <h3>You don't have any draft posts yet</h3>
+                <p>Create a new draft!</p>
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+        
+        <!-- Comments Tab -->
+        <div id="tab-comments" class="tab-pane {% if not user.is_superuser %}active{% endif %}">
+            <h2 class="profile-articles-header">Comments</h2>
+            
+            {% if comments %}
+            <div class="profile-articles">
+                {% for comment in comments %}
+                <div class="profile-article">
+                    <h3 class="profile-article-title">
+                        <a href="{% url 'blog:post_detail' comment.post.slug %}#comment-{{ comment.id }}">{{ comment.post.title }}</a>
+                    </h3>
+                    
+                    <div class="profile-article-meta">
+                        <span><i class="fas fa-clock"></i> {{ comment.created_at|date:"d M Y" }}</span>
+                    </div>
+                    
+                    <div class="comment-content">
+                        <p>{{ comment.content|truncatewords:30 }}</p>
+                    </div>
+                    
+                    <a href="{% url 'blog:post_detail' comment.post.slug %}#comment-{{ comment.id }}" class="view-article">
+                        go to comment <i class="fas fa-chevron-right"></i>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <h3>You haven't made any comments yet</h3>
+                <p>Make your first comment on a post!</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const tabs = document.querySelectorAll('.profile-tab');
+        const tabPanes = document.querySelectorAll('.tab-pane');
+        
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Get the tab ID from data attribute
+                const tabId = this.getAttribute('data-tab');
+                
+                // Remove active class from all tabs and panes
+                tabs.forEach(t => t.classList.remove('active'));
+                tabPanes.forEach(p => p.classList.remove('active'));
+                
+                // Add active class to current tab and pane
+                this.classList.add('active');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+    });
+</script>
+{% endblock %} 

@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About - Markdown Blog{% endblock %}
+
+{% block content %}
+<div class="about-page">
+    <div class="page-header">
+        <h1 class="page-title">About Markdown Blog</h1>
+    </div>
+    
+    <div class="about-content">
+        <div class="about-section">
+            <h2>Our Story</h2>
+            <p>Markdown Blog is a platform dedicated to sharing knowledge and insights through beautifully formatted content. Our mission is to make it easy for writers to publish their thoughts and for readers to discover high-quality articles.</p>
+            <p>Founded in 2023, we believe in the power of well-written content to educate, inspire, and connect people from diverse backgrounds and interests.</p>
+        </div>
+        
+        <div class="about-section">
+            <h2>Our Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-feather-alt"></i>
+                    </div>
+                    <h3>Simple Markdown Editing</h3>
+                    <p>Write your content using Markdown, a simple and powerful formatting syntax that's easy to learn and use.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                    <h3>Beautiful Formatting</h3>
+                    <p>Your content is automatically transformed into beautifully formatted HTML with syntax highlighting for code blocks.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Responsive Design</h3>
+                    <p>Our blog looks great on all devices, from desktop computers to smartphones and tablets.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3>Reader Engagement</h3>
+                    <p>Engage with your readers through comments and discussions on your articles.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="about-section">
+            <h2>Meet the Team</h2>
+            <div class="team-grid">
+                <!-- Replace with actual team members -->
+                <div class="team-member">
+                    <div class="member-avatar">
+                        <img src="{% static 'img/placeholder.jpg' %}" alt="Team Member">
+                    </div>
+                    <h3>John Doe</h3>
+                    <p class="member-role">Founder & CEO</p>
+                    <p class="member-bio">John is passionate about creating platforms that empower content creators.</p>
+                </div>
+                
+                <div class="team-member">
+                    <div class="member-avatar">
+                        <img src="{% static 'img/placeholder.jpg' %}" alt="Team Member">
+                    </div>
+                    <h3>Jane Smith</h3>
+                    <p class="member-role">Lead Developer</p>
+                    <p class="member-bio">Jane ensures that our platform is fast, secure, and easy to use.</p>
+                </div>
+                
+                <div class="team-member">
+                    <div class="member-avatar">
+                        <img src="{% static 'img/placeholder.jpg' %}" alt="Team Member">
+                    </div>
+                    <h3>Robert Johnson</h3>
+                    <p class="member-role">Content Strategist</p>
+                    <p class="member-bio">Robert helps writers create engaging and impactful content.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="about-section">
+            <h2>Contact Us</h2>
+            <p>We'd love to hear from you! If you have any questions, suggestions, or feedback, please don't hesitate to reach out.</p>
+            
+            <div class="contact-info">
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <a href="mailto:contact@markdownblog.com">contact@markdownblog.com</a>
+                </div>
+                
+                <div class="contact-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>123 Blog Street, Content City, 12345</span>
+                </div>
+                
+                <div class="social-links">
+                    <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

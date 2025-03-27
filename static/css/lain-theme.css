@@ -1,0 +1,540 @@
+/* Lain Theme - Serial Experiments Lain Inspired Styling
+-------------------------------------------------- */
+
+/* Base color overrides - Lain colors */
+:root {
+  --lain-bg: #000000;
+  --lain-accent: #00b8d4;
+  --lain-green: #33ff33;
+  --lain-pink: #ff00a5;
+  --lain-glitch: rgba(0, 184, 212, 0.2);
+  --glitch-shadow: 0 0 10px rgba(0, 184, 212, 0.7), 0 0 20px rgba(0, 184, 212, 0.5), 0 0 30px rgba(0, 184, 212, 0.3);
+}
+
+/* Lain-inspired body background */
+body {
+  background-color: var(--lain-bg);
+  color: #f0f0f0;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Background grid effect */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(rgba(0, 184, 212, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 184, 212, 0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Random noise effect for the Wired feeling */
+body::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4AkEBDIXH4fE+AAAABl0RVh0Q29tbWVudABDcmVhdGVkIHdpdGggR0lNUFeBDhcAAACXSURBVGje7dixDYMwGIXR7xeBIjUdI2QkRmEEhqFINjSDUCRSrpCoQOL5Lq/xqy1Z8rXWXJNSSmfvPc+FEMLpe597QggxxsWYOWOMtNa+CJmttay1cs7lnPNCCKGUshCilFJyzgkhhBBCCCGEEEIIIYQQQgghhBBCCCGEEEIIIYQQQgghhBBCyL8j7Vu+993Y+OsVkJLPB1xyA9uZxzDHAAAAAElFTkSuQmCC');
+  opacity: 0.03;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Site header - translucent with glowing effect */
+.site-header {
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  border-bottom: 1px solid var(--lain-accent);
+  box-shadow: 0 0 15px rgba(0, 184, 212, 0.5);
+}
+
+/* Logo styling - pulse effect */
+.site-logo {
+  border: 2px solid var(--lain-accent);
+  box-shadow: var(--glitch-shadow);
+  animation: logo-pulse 4s infinite;
+}
+
+@keyframes logo-pulse {
+  0% { box-shadow: 0 0 10px rgba(0, 184, 212, 0.7); }
+  50% { box-shadow: 0 0 20px rgba(0, 184, 212, 0.9), 0 0 30px rgba(0, 184, 212, 0.5); }
+  100% { box-shadow: 0 0 10px rgba(0, 184, 212, 0.7); }
+}
+
+/* Site title - glitchy text */
+.site-title {
+  font-family: monospace, "Courier New", Courier;
+  letter-spacing: 1px;
+  position: relative;
+  background: linear-gradient(to right, var(--lain-accent), var(--lain-pink));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-fill-color: transparent;
+  text-shadow: 0 0 5px rgba(0, 184, 212, 0.7);
+  animation: glitch 5s infinite;
+}
+
+/* Glitch effect for site title */
+@keyframes glitch {
+  0% { transform: translate(0); }
+  2% { transform: translate(-2px, 0); }
+  4% { transform: translate(2px, 0); }
+  5% { transform: translate(0); }
+  40% { transform: translate(0); }
+  42% { transform: translate(-2px, 0); }
+  44% { transform: translate(2px, 0); }
+  45% { transform: translate(0); }
+  100% { transform: translate(0); }
+}
+
+/* Terminal-style text for nav links */
+.nav-links a, .nav-actions a {
+  color: var(--lain-accent);
+  font-family: monospace, "Courier New", Courier;
+  position: relative;
+  text-transform: lowercase;
+  opacity: 0.8;
+  transition: all 0.3s ease;
+}
+
+.nav-links a:hover, .nav-actions a:hover {
+  color: var(--lain-green);
+  opacity: 1;
+  text-shadow: 0 0 5px var(--lain-green);
+}
+
+.nav-links a::after {
+  background-color: var(--lain-green);
+  height: 1px;
+}
+
+/* Buttons - Terminal style */
+.btn {
+  font-family: monospace, "Courier New", Courier;
+  text-transform: lowercase;
+  border-radius: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::before {
+  content: "> ";
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.btn:hover::before {
+  opacity: 1;
+}
+
+.btn-primary {
+  background-color: transparent;
+  color: var(--lain-green);
+  border: 1px solid var(--lain-green);
+  box-shadow: 0 0 5px rgba(51, 255, 51, 0.5);
+}
+
+.btn-primary:hover {
+  background-color: rgba(51, 255, 51, 0.1);
+  box-shadow: 0 0 10px rgba(51, 255, 51, 0.7);
+}
+
+.btn-outline {
+  border: 1px solid var(--lain-accent);
+  color: var(--lain-accent);
+  box-shadow: 0 0 5px rgba(0, 184, 212, 0.5);
+}
+
+.btn-outline:hover {
+  background-color: rgba(0, 184, 212, 0.1);
+  box-shadow: 0 0 10px rgba(0, 184, 212, 0.7);
+}
+
+/* Post cards - Wired terminal look */
+.post-card {
+  background-color: rgba(0, 0, 0, 0.7);
+  border: 1px solid var(--lain-accent);
+  box-shadow: 0 0 10px rgba(0, 184, 212, 0.3);
+  border-radius: 0;
+  transition: all 0.3s ease;
+}
+
+.post-card:hover {
+  border-color: var(--lain-green);
+  box-shadow: 0 0 15px rgba(51, 255, 51, 0.5);
+  transform: translateY(-5px);
+}
+
+.post-card .post-title a {
+  color: var(--lain-accent);
+  font-family: monospace, "Courier New", Courier;
+}
+
+.post-card:hover .post-title a {
+  color: var(--lain-green);
+  text-shadow: 0 0 5px rgba(51, 255, 51, 0.5);
+}
+
+.post-content {
+  color: #f0f0f0;
+}
+
+.post-excerpt {
+  color: rgba(240, 240, 240, 0.7);
+  font-family: monospace, "Courier New", Courier;
+}
+
+.read-more {
+  color: var(--lain-green);
+  font-family: monospace, "Courier New", Courier;
+}
+
+.read-more::before {
+  content: "> ";
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.read-more:hover::before {
+  opacity: 1;
+}
+
+/* Categories badge */
+.category-badge {
+  background-color: rgba(0, 184, 212, 0.2);
+  border: 1px solid var(--lain-accent);
+  color: var(--lain-accent);
+  font-family: monospace, "Courier New", Courier;
+  text-transform: lowercase;
+  border-radius: 0;
+}
+
+/* Tags styling */
+.tag {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: var(--lain-accent);
+  border: 1px solid var(--lain-accent);
+  border-radius: 0;
+  font-family: monospace, "Courier New", Courier;
+  transition: all 0.3s ease;
+}
+
+.tag:hover {
+  background-color: rgba(51, 255, 51, 0.1);
+  color: var(--lain-green);
+  border-color: var(--lain-green);
+  box-shadow: 0 0 5px rgba(51, 255, 51, 0.5);
+}
+
+/* Footer styling */
+.site-footer {
+  background-color: rgba(0, 0, 0, 0.8);
+  border-top: 1px solid var(--lain-accent);
+  box-shadow: 0 0 15px rgba(0, 184, 212, 0.3);
+}
+
+.footer-section h3 {
+  color: var(--lain-accent);
+  font-family: monospace, "Courier New", Courier;
+  letter-spacing: 1px;
+}
+
+.footer-section p, .footer-section ul li a {
+  font-family: monospace, "Courier New", Courier;
+}
+
+.social-links a {
+  border: 1px solid var(--lain-accent);
+  background-color: transparent;
+  transition: all 0.3s ease;
+}
+
+.social-links a:hover {
+  background-color: rgba(0, 184, 212, 0.1);
+  border-color: var(--lain-green);
+  box-shadow: 0 0 10px rgba(51, 255, 51, 0.5);
+  color: var(--lain-green);
+}
+
+/* Typewriter effect for headings */
+h1, h2, h3, .section-title {
+  font-family: monospace, "Courier New", Courier;
+  color: var(--lain-accent);
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+  letter-spacing: 1px;
+}
+
+h1::after, h2::after, h3::after, .section-title::after {
+  content: "|";
+  position: absolute;
+  right: 0;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Terminal-like scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #000000;
+  border-left: 1px solid var(--lain-accent);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--lain-accent);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--lain-green);
+}
+
+/* Random glitch effect on page load */
+.glitch-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 184, 212, 0.05);
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0;
+  display: none;
+}
+
+.glitch-overlay.active {
+  display: block;
+  animation: random-glitch 10s linear infinite;
+}
+
+@keyframes random-glitch {
+  0% { opacity: 0; }
+  10% { opacity: 0; }
+  10.5% { opacity: 0.2; }
+  10.6% { opacity: 0; }
+  20% { opacity: 0; }
+  20.5% { opacity: 0.1; }
+  20.6% { opacity: 0; }
+  30% { opacity: 0; }
+  30.1% { opacity: 0.3; }
+  30.5% { opacity: 0; }
+  45% { opacity: 0; }
+  45.1% { opacity: 0.2; }
+  45.2% { opacity: 0; }
+  50% { opacity: 0; }
+  50.1% { opacity: 0.5; }
+  50.2% { opacity: 0; }
+  60% { opacity: 0; }
+  60.1% { opacity: 0.3; }
+  60.2% { opacity: 0; }
+  70% { opacity: 0; }
+  70.1% { opacity: 0.2; }
+  70.2% { opacity: 0; }
+  80% { opacity: 0; }
+  99.9% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+/* Empty state styling - Lain themed */
+.empty-state, 
+.post-card, 
+[class*="No Posts"], 
+[class*="No Featured Posts"] {
+  background-color: rgba(0, 0, 0, 0.7) !important;
+  border: 1px solid var(--lain-accent) !important;
+  box-shadow: 0 0 15px rgba(0, 184, 212, 0.3) !important;
+  color: var(--lain-accent) !important;
+  font-family: monospace, "Courier New", Courier !important;
+  border-radius: 0 !important;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.empty-state::before,
+.post-card::before,
+[class*="No Posts"]::before,
+[class*="No Featured Posts"]::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, transparent 65%, rgba(0, 184, 212, 0.1) 100%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.empty-state::after,
+.post-card::after,
+[class*="No Posts"]::after,
+[class*="No Featured Posts"]::after {
+  content: "connection lost";
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  font-size: 10px;
+  color: rgba(255, 0, 165, 0.5);
+  font-family: monospace;
+  letter-spacing: 1px;
+  z-index: 1;
+  opacity: 0.7;
+}
+
+.empty-state i,
+.post-card i {
+  color: var(--lain-accent) !important;
+  text-shadow: 0 0 5px rgba(0, 184, 212, 0.5);
+}
+
+/* No data message styling */
+.posts-grid,
+.featured-grid {
+  position: relative;
+}
+
+.posts-grid > div, 
+.featured-grid > div {
+  position: relative;
+  z-index: 1;
+}
+
+/* Search components */
+.search-container input[type="text"] {
+  background-color: rgba(0, 0, 0, 0.7);
+  border: 1px solid var(--lain-accent);
+  color: var(--lain-accent);
+  font-family: monospace, "Courier New", Courier;
+  padding: 0.6rem 2.5rem 0.6rem 1rem;
+}
+
+.search-container input[type="text"]:focus {
+  box-shadow: 0 0 10px rgba(0, 184, 212, 0.5);
+  outline: none;
+}
+
+.search-container button {
+  color: var(--lain-accent);
+}
+
+/* Filter and sorting styles */
+.filter-options h3 {
+  color: var(--lain-accent);
+  font-family: monospace, "Courier New", Courier;
+  border-bottom: 1px solid rgba(0, 184, 212, 0.3);
+}
+
+.filter-list a {
+  font-family: monospace, "Courier New", Courier;
+}
+
+.filter-list a:hover::before,
+.filter-list a.active::before {
+  content: "> ";
+  color: var(--lain-green);
+}
+
+/* No posts found state */
+[class*="No Posts Found"] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  background-color: rgba(0, 0, 0, 0.7);
+  border: 1px solid var(--lain-accent);
+  box-shadow: 0 0 15px rgba(0, 184, 212, 0.3);
+  min-height: 300px;
+  position: relative;
+  overflow: hidden;
+}
+
+[class*="No Posts Found"]::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 184, 212, 0.03) 0px,
+      rgba(0, 184, 212, 0.03) 1px,
+      transparent 1px,
+      transparent 2px
+    );
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+[class*="No Posts Found"]::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, transparent 65%, rgba(0, 184, 212, 0.1) 100%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+[class*="No Posts Found"] svg,
+[class*="No Posts Found"] i {
+  font-size: 3rem;
+  color: var(--lain-accent);
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* Special text styling for section titles */
+[class*="latest_posts"],
+[class*="View All"],
+[class*="Categories"],
+[class*="Popular Tags"] {
+  font-family: monospace, "Courier New", Courier !important;
+  color: var(--lain-accent) !important;
+  text-transform: lowercase;
+}
+
+.pagination a, 
+.pagination span {
+  background-color: rgba(0, 0, 0, 0.7);
+  border: 1px solid var(--lain-accent);
+  color: var(--lain-accent);
+  box-shadow: 0 0 10px rgba(0, 184, 212, 0.2);
+}
+
+.pagination .current-page {
+  background-color: rgba(0, 184, 212, 0.2);
+  border: 1px solid var(--lain-accent);
+  color: var(--lain-accent);
+  box-shadow: 0 0 10px rgba(0, 184, 212, 0.5);
+}
+
+/* SVG icon style */
+svg {
+  fill: var(--lain-accent);
+} 

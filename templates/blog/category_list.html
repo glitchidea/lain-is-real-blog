@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Categories - Lain Nexus{% endblock %}
+
+{% block content %}
+<div class="categories-page">
+    <h1 class="category-list-title" data-default-text="Browse Cat">Browse Cat</h1>
+    <p class="page-description">Find articles organized by topic</p>
+    
+    <div class="categories-grid">
+        {% for category in categories %}
+        <a href="{% url 'blog:category' category.slug %}" class="category-card">
+            <div class="category-icon">
+                {% if category.icon %}
+                <i class="{{ category.icon }}"></i>
+                {% else %}
+                <i class="fas fa-folder"></i>
+                {% endif %}
+            </div>
+            
+            <h3>{{ category.name }}</h3>
+                
+            {% if category.description %}
+            <p class="category-description">{{ category.description }}</p>
+            {% endif %}
+                
+            <span class="post-count">
+                {{ category.posts_count }} article{{ category.posts_count|pluralize }}
+            </span>
+        </a>
+        {% empty %}
+        <div class="empty-state">
+            <i class="fas fa-folder-open empty-icon"></i>
+            <h3>No Categories Yet</h3>
+            <p>There are no categories available at the moment.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,172 @@
+/* Admin özelleştirmeleri için CSS */
+
+/* CKEditor içerik alanını genişletme */
+.django-ckeditor-widget {
+    width: 100% !important;
+}
+
+/* CKEditor içindeki görseller için stil */
+.field-content img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* İçerik alanı açıklaması için stil */
+.help, .helptext {
+    color: #666;
+    font-size: 0.9rem;
+    margin-top: 5px;
+    display: block;
+}
+
+/* Görsel önizleme ve düzenleme alanları için stil */
+.field-featured_image_display img {
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* Admin form alanları için genel iyileştirmeler */
+.form-row {
+    margin-bottom: 15px;
+}
+
+/* CKEditor içindeki görsel düzenleme alanlarını iyileştirme */
+.cke_dialog_ui_input_file {
+    width: 100% !important;
+}
+
+/* Resim hizalama özelleştirmeleri */
+.align-left {
+    float: left;
+    margin: 0 15px 10px 0;
+    max-width: 40%;
+}
+
+.align-right {
+    float: right;
+    margin: 0 0 10px 15px;
+    max-width: 40%;
+}
+
+.align-center {
+    display: block;
+    margin: 10px auto;
+    text-align: center;
+}
+
+/* Resim boyut özelleştirmeleri */
+.img-small {
+    max-width: 25%;
+}
+
+.img-medium {
+    max-width: 50%;
+}
+
+.img-large {
+    max-width: 75%;
+}
+
+.img-full {
+    max-width: 100%;
+    width: 100%;
+}
+
+/* Otomatik Boyutlandırma Özellikleri - YENİ */
+.img-auto {
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+.img-responsive {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 1rem auto;
+}
+
+.img-auto-height {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+.img-preserve {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+}
+
+/* Yüksek Kaliteli Görsel Gösterimi - YENİ */
+.img-hq {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    -ms-interpolation-mode: bicubic;
+}
+
+/* Akıllı Boyutlandırma - YENİ */
+.img-smart {
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+    transition: all 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    .img-smart {
+        max-width: 100% !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        float: none !important;
+        display: block !important;
+    }
+}
+
+/* Görsel başlıkları için stil */
+.image-caption {
+    font-size: 0.9rem;
+    font-style: italic;
+    color: #666;
+    margin-top: 5px;
+    display: block;
+    text-align: center;
+}
+
+/* Görsel yükleme alanı için gelişmiş stil */
+.file-upload {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.file-upload input[type="file"] {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    border: 1px dashed #ccc;
+    border-radius: 4px;
+    background: #f9f9f9;
+}
+
+.file-upload input[type="file"]:hover {
+    border-color: #79aec8;
+    background: #f5f5f5;
+}
+
+/* Admin formlarda fieldset açıklamaları için stil */
+fieldset.module h2 {
+    margin-bottom: 10px;
+}
+
+fieldset.module .description {
+    padding: 10px 15px;
+    margin-bottom: 15px;
+    background-color: #f9f9f9;
+    border-left: 4px solid #79aec8;
+    color: #555;
+    font-size: 0.9rem;
+    line-height: 1.5;
+} 

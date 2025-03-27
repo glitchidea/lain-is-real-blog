@@ -1,0 +1,68 @@
+{% if page.has_other_pages %}
+<div class="pagination">
+    {% if page.has_previous %}
+    <a href="?page={{ page.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" class="page-item">
+        <i class="fas fa-chevron-left"></i> Önceki
+    </a>
+    {% else %}
+    <span class="page-item disabled">
+        <i class="fas fa-chevron-left"></i> Önceki
+    </span>
+    {% endif %}
+    
+    {% for num in page.paginator.page_range %}
+        {% if page.number == num %}
+        <span class="page-item active">{{ num }}</span>
+        {% elif num > page.number|add:'-3' and num < page.number|add:'3' %}
+        <a href="?page={{ num }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" class="page-item">
+            {{ num }}
+        </a>
+        {% endif %}
+    {% endfor %}
+    
+    {% if page.has_next %}
+    <a href="?page={{ page.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" class="page-item">
+        Sonraki <i class="fas fa-chevron-right"></i>
+    </a>
+    {% else %}
+    <span class="page-item disabled">
+        Sonraki <i class="fas fa-chevron-right"></i>
+    </span>
+    {% endif %}
+</div>
+
+<style>
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 30px 0;
+        flex-wrap: wrap;
+    }
+    
+    .page-item {
+        display: inline-block;
+        padding: 8px 12px;
+        margin: 0 5px 5px;
+        border-radius: 4px;
+        background-color: #f8f9fa;
+        color: #333;
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+    
+    .page-item:hover {
+        background-color: #e9ecef;
+    }
+    
+    .page-item.active {
+        background-color: #3498db;
+        color: white;
+    }
+    
+    .page-item.disabled {
+        color: #aaa;
+        cursor: not-allowed;
+    }
+</style>
+{% endif %} 

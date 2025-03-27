@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+{% if category %}{{ category.name }} - 
+{% elif tag %}Posts tagged with "{{ tag.name }}" - 
+{% elif search_query %}Search results for "{{ search_query }}" - 
+{% else %}All Articles - 
+{% endif %}Lain Nexus
+{% endblock %}
+
+{% block content %}
+<div class="son-yazilar-container">
+    {% if category %}
+    <h1 class="category-title" data-default-text="{{ category.name }}">{{ category.name }}</h1>
+    {% if category.description %}<p class="page-description">{{ category.description }}</p>{% endif %}
+    {% elif tag %}
+    <h1 class="tags-title" data-default-text="Posts tagged with &quot;{{ tag.name }}&quot;">Posts tagged with "{{ tag.name }}"</h1>
+    {% elif search_query %}
+    <h1 class="son-yazilar-title" data-default-text="Search results for &quot;{{ search_query }}&quot;">Search results for "{{ search_query }}"</h1>
+    {% else %}
+    <h1 class="son-yazilar-title" data-default-text="All Articles">All Articles</h1>
+    {% endif %}
+    
+    <div class="son-yazilar-grid">
+        {% for post in posts %}
+        <article class="son-yazılar-card">
+            <div class="son-yazılar-header">
+                {% if post.categories.first %}
+                <a href="{% url 'blog:category' post.categories.first.slug %}" class="son-yazılar-tag">{{ post.categories.first.name }}</a>
+                {% endif %}
+            </div>
+            <div class="son-yazılar-body">
+                <h3 class="son-yazılar-title">
+                    <a href="{% url 'blog:post_detail' post.slug %}">{{ post.title }}</a>
+                </h3>
+                
+                <div class="son-yazılar-meta">
+                    <span><i class="far fa-calendar"></i> {{ post.created_at|date:"M d, Y" }}</span>
+                    <span><i class="far fa-user"></i> {{ post.author.username }}</span>
+                </div>
+                
+                <div class="son-yazılar-content">
+                    <p>{{ post.excerpt|truncatechars:120 }}</p>
+                </div>
+                
+                <a href="{% url 'blog:post_detail' post.slug %}" class="read-more">
+                    Read More <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </article>
+        {% empty %}
+        <div class="empty-state">
+            <div class="connection-status"><span>connection-status</span>••</div>
+            <div class="warning-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <div class="terminal-content">
+                <div class="terminal-line">$ fetch data --from-layer 7</div>
+                <div class="terminal-line">Error: data unreachable • connection timeout</div>
+                <div class="terminal-line">Protocol error • | No posts available at this time.</div>
+                <div class="terminal-line">$ retry --connection</div>
+                <div class="terminal-line">$ <span class="blinking-cursor">█</span></div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    {% if posts.has_other_pages %}
+    <div class="post-pagination">
+        {% if posts.has_previous %}
+        <a href="?page={{ posts.previous_page_number }}" class="pagination-prev">Previous</a>
+        {% endif %}
+        
+        <span class="pagination-current">Page {{ posts.number }} of {{ posts.paginator.num_pages }}</span>
+        
+        {% if posts.has_next %}
+        <a href="?page={{ posts.next_page_number }}" class="pagination-next">Next</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %} 

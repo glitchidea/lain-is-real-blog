@@ -1,0 +1,244 @@
+/* Lain-themed tags browsing experience */
+
+/* Tags list container */
+.tags-container {
+    margin-bottom: 3rem;
+}
+
+.tags-title {
+    font-family: 'Share Tech Mono', monospace;
+    color: #00b8d4;
+    margin-bottom: 1.5rem;
+    position: relative;
+    padding-left: 1.5rem;
+    letter-spacing: 1px;
+    text-shadow: 0 0 5px rgba(0, 184, 212, 0.5);
+}
+
+.tags-title::before {
+    content: '>';
+    position: absolute;
+    left: 0;
+    color: #33ff33;
+    animation: blink 1s infinite;
+    font-weight: bold;
+}
+
+.tags-wrapper {
+    position: relative;
+    background-color: rgba(0, 0, 0, 0.7);
+    border: 1px solid rgba(0, 184, 212, 0.3);
+    box-shadow: 0 0 20px rgba(0, 184, 212, 0.1);
+    padding: 2rem;
+    margin-bottom: 3rem;
+}
+
+.tags-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent 48%, rgba(0, 184, 212, 0.05) 50%, transparent 52%);
+    background-size: 4px 4px;
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+/* Description text */
+.tags-description {
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 2rem;
+    font-family: 'Source Sans Pro', sans-serif;
+    line-height: 1.6;
+    max-width: 800px;
+}
+
+/* Tags cloud */
+.tags-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1rem 0;
+}
+
+.tag-item {
+    display: inline-flex;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(0, 184, 212, 0.3);
+    color: #00b8d4;
+    font-family: 'Share Tech Mono', monospace;
+    padding: 0.4rem 1rem;
+    border-radius: 3px;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.tag-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 184, 212, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.tag-item:hover {
+    border-color: #33ff33;
+    color: #33ff33;
+    transform: translateY(-3px);
+    box-shadow: 0 3px 10px rgba(51, 255, 51, 0.2);
+}
+
+.tag-item:hover::before {
+    left: 100%;
+}
+
+.tag-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 184, 212, 0.1);
+    color: #00b8d4;
+    font-size: 0.8rem;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    margin-left: 8px;
+    transition: all 0.3s ease;
+}
+
+.tag-item:hover .tag-count {
+    background-color: rgba(51, 255, 51, 0.1);
+    color: #33ff33;
+}
+
+/* Empty state for tags */
+.empty-state {
+    background-color: rgba(0, 0, 0, 0.7);
+    border: 1px solid rgba(0, 184, 212, 0.3);
+    padding: 2rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    color: rgba(255, 255, 255, 0.7);
+    font-family: 'Share Tech Mono', monospace;
+    position: relative;
+}
+
+.empty-state::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.1),
+        rgba(0, 0, 0, 0.1) 1px,
+        transparent 1px,
+        transparent 2px
+    );
+    pointer-events: none;
+    opacity: 0.2;
+}
+
+.connection-status {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.6);
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 0.3rem 0.6rem;
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(0, 184, 212, 0.2);
+}
+
+.connection-status span {
+    margin-right: 5px;
+}
+
+.terminal-content {
+    text-align: left;
+    padding: 1rem;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 184, 212, 0.2);
+    color: rgba(255, 255, 255, 0.7);
+    font-family: 'Share Tech Mono', monospace;
+    line-height: 1.6;
+}
+
+.terminal-line {
+    margin-bottom: 0.5rem;
+}
+
+.blinking-cursor {
+    animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+    from, to { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+/* Tag post list */
+.tag-posts-container {
+    margin-top: 2rem;
+}
+
+.tag-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(0, 184, 212, 0.3);
+    padding-bottom: 1rem;
+}
+
+.tag-header .tag-badge {
+    display: inline-flex;
+    align-items: center;
+    background-color: rgba(0, 184, 212, 0.1);
+    border: 1px solid rgba(0, 184, 212, 0.3);
+    color: #00b8d4;
+    font-family: 'Share Tech Mono', monospace;
+    padding: 0.5rem 1rem;
+    border-radius: 3px;
+    font-size: 1.2rem;
+}
+
+.tag-header .tag-posts-count {
+    color: rgba(255, 255, 255, 0.6);
+    font-family: 'Share Tech Mono', monospace;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .tags-wrapper {
+        padding: 1.5rem;
+    }
+    
+    .tags-cloud {
+        gap: 0.8rem;
+        justify-content: center;
+    }
+    
+    .tag-item {
+        padding: 0.3rem 0.8rem;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .tag-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+} 

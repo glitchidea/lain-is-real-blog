@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Tags - Lain Nexus{% endblock %}
+
+{% block content %}
+<div class="tags-container">
+    <h1 class="tags-title" data-default-text="All Tags">All Tags</h1>
+    <p class="tags-description">Explore articles by topic tags</p>
+    
+    <div class="tags-wrapper">
+        {% if tags %}
+        <div class="tags-cloud">
+            {% for tag in tags %}
+            <a href="{% url 'blog:tag' tag.slug %}" class="tag-item">
+                <span class="tag-name">{{ tag.name }}</span>
+                <span class="tag-count">{{ tag.post_count }}</span>
+            </a>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <div class="connection-status"><span>connection-status</span>••</div>
+            <div class="warning-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <div class="terminal-content">
+                <div class="terminal-line">$ fetch data --from-layer 7</div>
+                <div class="terminal-line">Error: data unreachable • connection timeout</div>
+                <div class="terminal-line">Protocol error • | No tags available at this time.</div>
+                <div class="terminal-line">$ retry --connection</div>
+                <div class="terminal-line">$ <span class="blinking-cursor">█</span></div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,709 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My Draft Posts - Markdown Blog{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h1>My Draft Posts</h1>
+        <p class="text-muted">View, edit, or preview your unpublished posts.</p>
+    </div>
+    
+    <div class="dashboard-content">
+        {% if drafts %}
+            <div class="draft-posts">
+                {% for draft in drafts %}
+                <div class="draft-card">
+                    <div class="draft-header">
+                        <h2 class="draft-title">{{ draft.title }}</h2>
+                        <span class="draft-date">
+                            <i class="fas fa-calendar"></i> Created: {{ draft.created_at|date:"d M Y" }}
+                        </span>
+                    </div>
+                    
+                    <div class="draft-content">
+                        <div class="draft-excerpt">
+                            {{ draft.excerpt }}
+                        </div>
+                        
+                        {% if draft.featured_image %}
+                        <div class="draft-image">
+                            <img src="{{ draft.featured_image.url }}" alt="{{ draft.title }}">
+                            {% if draft.featured_image_caption %}
+                            <span class="image-caption">{{ draft.featured_image_caption }}</span>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                        
+                        <div class="draft-meta">
+                            <div class="meta-item">
+                                <i class="fas fa-tag"></i> Categories:
+                                {% for category in draft.categories.all %}
+                                <span class="category-badge">{{ category.name }}</span>
+                                {% empty %}
+                                <span class="text-muted">No category</span>
+                                {% endfor %}
+                            </div>
+                            
+                            <div class="meta-item">
+                                <i class="fas fa-tags"></i> Tags:
+                                {% for tag in draft.tags.all %}
+                                <span class="tag-badge">{{ tag.name }}</span>
+                                {% empty %}
+                                <span class="text-muted">No tags</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        <div class="draft-preview-container">
+                            <div class="preview-heading">
+                                <i class="fas fa-eye"></i> Post Preview
+                                <span class="preview-toggle-btn">Close</span>
+                            </div>
+                            <div class="preview-toolbar">
+                                <button class="preview-mode-btn active" data-mode="formatted">Formatted View</button>
+                                <button class="preview-mode-btn" data-mode="raw">HTML View</button>
+                            </div>
+                            <div class="preview-content formatted-view active">
+                                <div class="markdown-content blog-content">
+                                    {{ draft.content|safe }}
+                                </div>
+                            </div>
+                            <div class="preview-content raw-view">
+                                <pre><code>{{ draft.content }}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="draft-actions">
+                        <a href="{% url 'admin:blog_post_change' draft.id %}" class="btn btn-primary">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
+                        <a href="#" class="btn btn-outline toggle-preview" data-target="preview-{{ draft.id }}">
+                            <i class="fas fa-eye"></i> Show/Hide Preview
+                        </a>
+                        {% if user.is_superuser %}
+                        <form method="post" action="{% url 'admin:blog_post_change' draft.id %}" class="inline-form">
+                            {% csrf_token %}
+                            <input type="hidden" name="_save" value="1">
+                            <input type="hidden" name="status" value="published">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-paper-plane"></i> Publish
+                            </button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            {% include 'partials/pagination.html' with page=page_obj %}
+        {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <i class="fas fa-edit"></i>
+                </div>
+                <h3>You don't have any draft posts</h3>
+                <p>Go to the admin panel to create a new draft.</p>
+                {% if user.is_superuser %}
+                <a href="{% url 'admin:blog_post_add' %}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Create New Draft
+                </a>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+    
+    <div class="dashboard-sidebar">
+        <div class="sidebar-widget">
+            <h3>Draft Statistics</h3>
+            <div class="stats-item">
+                <span class="label">Total Drafts:</span>
+                <span class="value">{{ draft_count }}</span>
+            </div>
+            <div class="stats-item">
+                <span class="label">Oldest Draft:</span>
+                <span class="value">
+                    {% if oldest_draft %}
+                    {{ oldest_draft.created_at|date:"d M Y" }}
+                    {% else %}
+                    -
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+        
+        <div class="sidebar-widget">
+            <h3>Quick Links</h3>
+            <ul class="sidebar-links">
+                <li><a href="{% url 'accounts:profile' %}"><i class="fas fa-user"></i> My Profile</a></li>
+                <li><a href="{% url 'accounts:user_posts' %}"><i class="fas fa-feather-alt"></i> All My Posts</a></li>
+                <li class="active"><a href="{% url 'accounts:user_drafts' %}"><i class="fas fa-edit"></i> My Draft Posts</a></li>
+                <li><a href="{% url 'accounts:user_comments' %}"><i class="fas fa-comments"></i> My Comments</a></li>
+                {% if user.is_superuser %}
+                <li><a href="{% url 'admin:blog_post_add' %}"><i class="fas fa-plus"></i> Add New Post</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Toggle draft preview
+        const toggleButtons = document.querySelectorAll('.toggle-preview');
+        
+        toggleButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const draftCard = this.closest('.draft-card');
+                const previewContainer = draftCard.querySelector('.draft-preview-container');
+                
+                if (previewContainer.classList.contains('active')) {
+                    previewContainer.classList.remove('active');
+                    this.innerHTML = '<i class="fas fa-eye"></i> Show Preview';
+                } else {
+                    previewContainer.classList.add('active');
+                    this.innerHTML = '<i class="fas fa-eye-slash"></i> Hide Preview';
+                }
+            });
+        });
+        
+        // Close preview when clicking the close button
+        document.querySelectorAll('.preview-toggle-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const previewContainer = this.closest('.draft-preview-container');
+                previewContainer.classList.remove('active');
+                const toggleBtn = previewContainer.closest('.draft-card').querySelector('.toggle-preview');
+                toggleBtn.innerHTML = '<i class="fas fa-eye"></i> Show Preview';
+            });
+        });
+        
+        // Switch between formatted and raw view
+        document.querySelectorAll('.preview-mode-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const previewContainer = this.closest('.draft-preview-container');
+                const buttons = previewContainer.querySelectorAll('.preview-mode-btn');
+                const views = previewContainer.querySelectorAll('.preview-content');
+                
+                // Remove active class from all buttons and views
+                buttons.forEach(b => b.classList.remove('active'));
+                views.forEach(v => v.classList.remove('active'));
+                
+                // Add active class to clicked button and corresponding view
+                this.classList.add('active');
+                const mode = this.dataset.mode;
+                previewContainer.querySelector(`.${mode}-view`).classList.add('active');
+            });
+        });
+        
+        // Initialize with hidden previews
+        document.querySelectorAll('.draft-preview-container').forEach(container => {
+            container.classList.remove('active');
+        });
+    });
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .dashboard-container {
+        display: flex;
+        flex-wrap: wrap;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        gap: 30px;
+    }
+    
+    .dashboard-header {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    
+    .dashboard-header h1 {
+        margin-top: 0;
+        margin-bottom: 10px;
+        font-size: 28px;
+    }
+    
+    .dashboard-content {
+        flex: 1;
+        min-width: 0;
+    }
+    
+    .dashboard-sidebar {
+        width: 300px;
+    }
+    
+    .draft-card {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        margin-bottom: 25px;
+        overflow: hidden;
+    }
+    
+    .draft-header {
+        padding: 20px 20px 10px;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .draft-title {
+        margin: 0 0 10px;
+        font-size: 22px;
+    }
+    
+    .draft-date {
+        color: #777;
+        font-size: 14px;
+    }
+    
+    .draft-content {
+        padding: 20px;
+    }
+    
+    .draft-excerpt {
+        color: #555;
+        margin-bottom: 20px;
+        line-height: 1.6;
+    }
+    
+    .draft-image {
+        margin-bottom: 20px;
+        position: relative;
+    }
+    
+    .draft-image img {
+        max-width: 100%;
+        border-radius: 6px;
+    }
+    
+    .image-caption {
+        display: block;
+        font-size: 13px;
+        color: #777;
+        margin-top: 8px;
+        text-align: center;
+        font-style: italic;
+    }
+    
+    .draft-meta {
+        margin-bottom: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+    
+    .meta-item {
+        color: #666;
+        font-size: 14px;
+    }
+    
+    .category-badge, .tag-badge {
+        display: inline-block;
+        padding: 3px 8px;
+        margin: 0 5px 5px 0;
+        border-radius: 4px;
+        font-size: 12px;
+    }
+    
+    .category-badge {
+        background-color: #e3f2fd;
+        color: #0d47a1;
+    }
+    
+    .tag-badge {
+        background-color: #f3e5f5;
+        color: #6a1b9a;
+    }
+    
+    .draft-preview-container {
+        margin-top: 20px;
+        border: 1px solid #eee;
+        border-radius: 6px;
+        overflow: hidden;
+        display: none;
+        box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+    }
+    
+    .draft-preview-container.active {
+        display: block;
+    }
+    
+    .preview-heading {
+        background-color: #f8f9fa;
+        padding: 12px 15px;
+        font-weight: bold;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .preview-heading i {
+        color: #3498db;
+        margin-right: 6px;
+    }
+    
+    .preview-toggle-btn {
+        cursor: pointer;
+        font-size: 13px;
+        color: #777;
+        font-weight: normal;
+    }
+    
+    .preview-toggle-btn:hover {
+        color: #333;
+    }
+    
+    .preview-toolbar {
+        background-color: #f8f9fa;
+        padding: 8px 15px;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        gap: 10px;
+    }
+    
+    .preview-mode-btn {
+        border: none;
+        background: none;
+        padding: 5px 10px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 13px;
+        color: #555;
+    }
+    
+    .preview-mode-btn:hover {
+        background-color: #e9ecef;
+    }
+    
+    .preview-mode-btn.active {
+        background-color: #3498db;
+        color: white;
+    }
+    
+    .preview-content {
+        padding: 25px;
+        max-height: 600px;
+        overflow-y: auto;
+        background-color: white;
+        display: none;
+    }
+    
+    .preview-content.active {
+        display: block;
+    }
+    
+    .formatted-view {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.7;
+    }
+    
+    .raw-view {
+        background-color: #f8f9fa;
+    }
+    
+    .raw-view pre {
+        margin: 0;
+        white-space: pre-wrap;
+        font-family: monospace;
+        font-size: 14px;
+        color: #333;
+    }
+    
+    .markdown-content.blog-content {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    .markdown-content.blog-content h1,
+    .markdown-content.blog-content h2,
+    .markdown-content.blog-content h3,
+    .markdown-content.blog-content h4,
+    .markdown-content.blog-content h5,
+    .markdown-content.blog-content h6 {
+        margin-top: 1.5em;
+        margin-bottom: 0.75em;
+        color: #2c3e50;
+        font-weight: 600;
+    }
+    
+    .markdown-content.blog-content h1 {
+        font-size: 2em;
+        border-bottom: 1px solid #eaecef;
+        padding-bottom: 0.3em;
+    }
+    
+    .markdown-content.blog-content h2 {
+        font-size: 1.5em;
+        border-bottom: 1px solid #eaecef;
+        padding-bottom: 0.3em;
+    }
+    
+    .markdown-content.blog-content h3 {
+        font-size: 1.25em;
+    }
+    
+    .markdown-content.blog-content h4 {
+        font-size: 1em;
+    }
+    
+    .markdown-content.blog-content p {
+        margin-bottom: 1em;
+        line-height: 1.7;
+    }
+    
+    .markdown-content.blog-content a {
+        color: #0366d6;
+        text-decoration: none;
+    }
+    
+    .markdown-content.blog-content a:hover {
+        text-decoration: underline;
+    }
+    
+    .markdown-content.blog-content img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 6px;
+        margin: 1em 0;
+    }
+    
+    .markdown-content.blog-content ul,
+    .markdown-content.blog-content ol {
+        margin-bottom: 1em;
+        padding-left: 2em;
+    }
+    
+    .markdown-content.blog-content li {
+        margin-bottom: 0.5em;
+    }
+    
+    .markdown-content.blog-content blockquote {
+        padding: 0 1em;
+        color: #6a737d;
+        border-left: 0.25em solid #dfe2e5;
+        margin: 1em 0;
+    }
+    
+    .markdown-content.blog-content pre {
+        background-color: #f6f8fa;
+        border-radius: 3px;
+        font-size: 85%;
+        line-height: 1.45;
+        overflow: auto;
+        padding: 16px;
+        margin-bottom: 1em;
+    }
+    
+    .markdown-content.blog-content code {
+        background-color: rgba(27, 31, 35, 0.05);
+        border-radius: 3px;
+        font-size: 85%;
+        margin: 0;
+        padding: 0.2em 0.4em;
+    }
+    
+    .markdown-content.blog-content pre code {
+        background-color: transparent;
+        padding: 0;
+    }
+    
+    .markdown-content.blog-content table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1em 0;
+    }
+    
+    .markdown-content.blog-content table th,
+    .markdown-content.blog-content table td {
+        border: 1px solid #dfe2e5;
+        padding: 6px 13px;
+    }
+    
+    .markdown-content.blog-content table th {
+        background-color: #f6f8fa;
+        font-weight: 600;
+    }
+    
+    .markdown-content.blog-content .img-left {
+        float: left;
+        margin-right: 15px;
+        margin-bottom: 10px;
+    }
+    
+    .markdown-content.blog-content .img-right {
+        float: right;
+        margin-left: 15px;
+        margin-bottom: 10px;
+    }
+    
+    .markdown-content.blog-content .img-center {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .markdown-content.blog-content .img-small {
+        max-width: 300px;
+    }
+    
+    .markdown-content.blog-content .img-medium {
+        max-width: 500px;
+    }
+    
+    .markdown-content.blog-content .img-large {
+        max-width: 700px;
+    }
+    
+    .markdown-content.blog-content .img-full {
+        width: 100%;
+    }
+    
+    .markdown-content.blog-content .img-auto {
+        width: auto;
+        height: auto;
+    }
+    
+    .markdown-content.blog-content .img-responsive {
+        max-width: 100%;
+        height: auto;
+    }
+    
+    .markdown-content.blog-content .img-preserve {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+    }
+    
+    .markdown-content.blog-content .img-hq {
+        image-rendering: high-quality;
+    }
+    
+    .markdown-content.blog-content figure {
+        margin: 1em 0;
+    }
+    
+    .markdown-content.blog-content figcaption {
+        color: #6a737d;
+        font-size: 0.9em;
+        text-align: center;
+        margin-top: 0.5em;
+        font-style: italic;
+    }
+    
+    .draft-actions {
+        padding: 15px 20px;
+        background-color: #f9f9f9;
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+    }
+    
+    .inline-form {
+        display: inline;
+    }
+    
+    .sidebar-widget {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        padding: 20px;
+        margin-bottom: 25px;
+    }
+    
+    .sidebar-widget h3 {
+        margin-top: 0;
+        margin-bottom: 15px;
+        font-size: 18px;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 10px;
+    }
+    
+    .stats-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+    
+    .stats-item .label {
+        color: #666;
+    }
+    
+    .stats-item .value {
+        font-weight: bold;
+    }
+    
+    .sidebar-links {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .sidebar-links li {
+        margin-bottom: 10px;
+    }
+    
+    .sidebar-links li a {
+        display: block;
+        padding: 8px 10px;
+        border-radius: 4px;
+        color: #333;
+        text-decoration: none;
+        transition: background-color 0.2s;
+    }
+    
+    .sidebar-links li a:hover {
+        background-color: #f5f5f5;
+    }
+    
+    .sidebar-links li.active a {
+        background-color: #e3f2fd;
+        color: #0d47a1;
+        font-weight: bold;
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 50px 20px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+    }
+    
+    .empty-icon {
+        font-size: 48px;
+        color: #ccc;
+        margin-bottom: 15px;
+    }
+    
+    .empty-state h3 {
+        margin-top: 0;
+        margin-bottom: 10px;
+        font-size: 20px;
+    }
+    
+    .empty-state p {
+        margin-bottom: 20px;
+        color: #666;
+    }
+    
+    @media (max-width: 992px) {
+        .dashboard-container {
+            flex-direction: column;
+        }
+        
+        .dashboard-sidebar {
+            width: 100%;
+            order: 1;
+        }
+        
+        .dashboard-content {
+            order: 2;
+        }
+    }
+</style>
+{% endblock %} 

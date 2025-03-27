@@ -1,0 +1,163 @@
+{% load i18n %}
+
+<div class="editor-toolbar" id="editor-toolbar">
+    <div class="btn-group btn-group-sm">
+        <button type="button" class="toolbar-btn" data-action="heading" data-level="1" title="{% trans 'Heading 1' %}">
+            <i class="fas fa-heading"></i>1
+        </button>
+        <button type="button" class="toolbar-btn" data-action="heading" data-level="2" title="{% trans 'Heading 2' %}">
+            <i class="fas fa-heading"></i>2
+        </button>
+        <button type="button" class="toolbar-btn" data-action="heading" data-level="3" title="{% trans 'Heading 3' %}">
+            <i class="fas fa-heading"></i>3
+        </button>
+    </div>
+
+    <span class="toolbar-divider"></span>
+
+    <div class="btn-group btn-group-sm">
+        <button type="button" class="toolbar-btn" data-action="bold" title="{% trans 'Bold' %}">
+            <i class="fas fa-bold"></i>
+        </button>
+        <button type="button" class="toolbar-btn" data-action="italic" title="{% trans 'Italic' %}">
+            <i class="fas fa-italic"></i>
+        </button>
+        <button type="button" class="toolbar-btn" data-action="strikethrough" title="{% trans 'Strikethrough' %}">
+            <i class="fas fa-strikethrough"></i>
+        </button>
+    </div>
+
+    <span class="toolbar-divider"></span>
+
+    <div class="btn-group btn-group-sm">
+        <button type="button" class="toolbar-btn" data-action="link" title="{% trans 'Link' %}">
+            <i class="fas fa-link"></i>
+        </button>
+        <button type="button" class="toolbar-btn" data-action="image" title="{% trans 'Image' %}">
+            <i class="fas fa-image"></i>
+        </button>
+        <button type="button" class="toolbar-btn" data-action="gallery" title="{% trans 'Gallery' %}">
+            <i class="fas fa-images"></i>
+        </button>
+    </div>
+
+    <span class="toolbar-divider"></span>
+
+    <div class="btn-group btn-group-sm">
+        <button type="button" class="toolbar-btn" data-action="unordered-list" title="{% trans 'Unordered List' %}">
+            <i class="fas fa-list-ul"></i>
+        </button>
+        <button type="button" class="toolbar-btn" data-action="ordered-list" title="{% trans 'Ordered List' %}">
+            <i class="fas fa-list-ol"></i>
+        </button>
+        <button type="button" class="toolbar-btn" data-action="task-list" title="{% trans 'Task List' %}">
+            <i class="fas fa-tasks"></i>
+        </button>
+    </div>
+
+    <span class="toolbar-divider"></span>
+
+    <div class="btn-group btn-group-sm">
+        <button type="button" class="toolbar-btn" data-action="quote" title="{% trans 'Blockquote' %}">
+            <i class="fas fa-quote-right"></i>
+        </button>
+        <button type="button" class="toolbar-btn" data-action="code" title="{% trans 'Inline Code' %}">
+            <i class="fas fa-code"></i>
+        </button>
+        <button type="button" class="toolbar-btn" data-action="code-block" title="{% trans 'Code Block' %}">
+            <i class="fas fa-file-code"></i>
+        </button>
+    </div>
+
+    <span class="toolbar-divider"></span>
+
+    <div class="btn-group btn-group-sm">
+        <button type="button" class="toolbar-btn" data-action="table" title="{% trans 'Table' %}">
+            <i class="fas fa-table"></i>
+        </button>
+        <button type="button" class="toolbar-btn" data-action="horizontal-rule" title="{% trans 'Horizontal Rule' %}">
+            <i class="fas fa-minus"></i>
+        </button>
+    </div>
+
+    <span class="toolbar-divider"></span>
+
+    <div class="btn-group btn-group-sm">
+        <button type="button" class="toolbar-btn" data-action="preview" title="{% trans 'Toggle Preview' %}">
+            <i class="fas fa-eye"></i>
+        </button>
+        <button type="button" class="toolbar-btn" data-action="help" title="{% trans 'Markdown Help' %}">
+            <i class="fas fa-question-circle"></i>
+        </button>
+    </div>
+</div>
+
+<div class="markdown-help" id="markdown-help" style="display: none;">
+    <div class="markdown-help-header">
+        <h3>{% trans 'Markdown Cheatsheet' %}</h3>
+        <button type="button" class="close-help" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="markdown-help-content">
+        <div class="help-row">
+            <div class="help-item">
+                <h4>{% trans 'Headers' %}</h4>
+                <pre># {% trans 'Header 1' %}
+## {% trans 'Header 2' %}
+### {% trans 'Header 3' %}</pre>
+            </div>
+            <div class="help-item">
+                <h4>{% trans 'Emphasis' %}</h4>
+                <pre>*{% trans 'italic' %}* or _{% trans 'italic' %}_
+**{% trans 'bold' %}** or __{% trans 'bold' %}__
+~~{% trans 'strikethrough' %}~~</pre>
+            </div>
+        </div>
+        <div class="help-row">
+            <div class="help-item">
+                <h4>{% trans 'Lists' %}</h4>
+                <pre>- {% trans 'Item 1' %}
+- {% trans 'Item 2' %}
+  - {% trans 'Nested Item' %}
+
+1. {% trans 'Item 1' %}
+2. {% trans 'Item 2' %}
+
+- [ ] {% trans 'Task item' %}
+- [x] {% trans 'Completed item' %}</pre>
+            </div>
+            <div class="help-item">
+                <h4>{% trans 'Links & Images' %}</h4>
+                <pre>[{% trans 'link text' %}](https://example.com)
+
+![{% trans 'alt text' %}](image-url.jpg)</pre>
+            </div>
+        </div>
+        <div class="help-row">
+            <div class="help-item">
+                <h4>{% trans 'Code' %}</h4>
+                <pre>`{% trans 'inline code' %}`
+
+```
+{% trans 'code block' %}
+```
+
+```python
+{% trans 'language-specific code block' %}
+```</pre>
+            </div>
+            <div class="help-item">
+                <h4>{% trans 'Other' %}</h4>
+                <pre>> {% trans 'Blockquote' %}
+
+{% trans 'Horizontal rule:' %}
+---
+
+| {% trans 'Header' %} | {% trans 'Header' %} |
+| ------ | ------ |
+| {% trans 'Cell' %}   | {% trans 'Cell' %}   |</pre>
+            </div>
+        </div>
+    </div>
+</div> 

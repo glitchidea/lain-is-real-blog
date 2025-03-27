@@ -1,0 +1,574 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{% if post %}Edit Post{% else %}New Post{% endif %} - Markdown Blog{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/editor.css' %}">
+<link rel="stylesheet" href="{% static 'css/prism.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="editor-container">
+    <form method="post" enctype="multipart/form-data" id="post-form" class="post-form">
+        {% csrf_token %}
+        
+        <div class="editor-header">
+            <h1 class="editor-title">{% if post %}Edit Post{% else %}New Post{% endif %}</h1>
+            
+            <div class="editor-actions">
+                <button type="button" id="preview-button" class="btn btn-outline">
+                    <i class="fas fa-eye"></i> Preview
+                </button>
+                
+                <button type="submit" name="save_draft" value="true" class="btn btn-outline" id="save-draft">
+                    <i class="fas fa-save"></i> Save Draft
+                </button>
+                
+                <button type="submit" name="publish" value="true" class="btn btn-primary" id="publish-post">
+                    <i class="fas fa-paper-plane"></i> {% if post.is_published %}Update{% else %}Publish{% endif %}
+                </button>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="id_title">Title</label>
+            <input type="text" name="title" id="id_title" value="{{ post.title|default:'' }}" placeholder="Enter post title..." required>
+            {% if form.title.errors %}
+            <div class="field-error">{{ form.title.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group">
+                <label for="id_categories">Categories</label>
+                <select name="categories" id="id_categories" multiple>
+                    {% for category in categories %}
+                    <option value="{{ category.id }}" {% if category in post.categories.all %}selected{% endif %}>{{ category.name }}</option>
+                    {% endfor %}
+                </select>
+                {% if form.categories.errors %}
+                <div class="field-error">{{ form.categories.errors }}</div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="id_tags">Tags</label>
+                <input type="text" name="tags" id="id_tags" value="{{ tags_str|default:'' }}" placeholder="tag1, tag2, tag3">
+                <div class="field-help">Separate tags with commas</div>
+                {% if form.tags.errors %}
+                <div class="field-error">{{ form.tags.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="id_excerpt">Excerpt</label>
+            <textarea name="excerpt" id="id_excerpt" rows="2" placeholder="A brief summary of the post...">{{ post.excerpt|default:'' }}</textarea>
+            {% if form.excerpt.errors %}
+            <div class="field-error">{{ form.excerpt.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            <label for="id_featured_image">Featured Image</label>
+            <div class="image-upload-container">
+                {% if post.featured_image %}
+                <div class="current-image">
+                    <img src="{{ post.featured_image.url }}" alt="Featured image">
+                    <label for="id_remove_featured_image" class="remove-image">
+                        <input type="checkbox" name="remove_featured_image" id="id_remove_featured_image">
+                        Remove current image
+                    </label>
+                </div>
+                {% endif %}
+                <div class="file-input-wrapper">
+                    <input type="file" name="featured_image" id="id_featured_image" accept="image/*">
+                    <div class="file-input-label">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <span>Choose an image...</span>
+                    </div>
+                </div>
+            </div>
+            {% if form.featured_image.errors %}
+            <div class="field-error">{{ form.featured_image.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            <label for="id_featured_image_caption">Image Caption</label>
+            <input type="text" name="featured_image_caption" id="id_featured_image_caption" value="{{ post.featured_image_caption|default:'' }}" placeholder="Caption for the featured image">
+            {% if form.featured_image_caption.errors %}
+            <div class="field-error">{{ form.featured_image_caption.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <div class="editor-main">
+            <div class="editor-wrapper" id="editor-wrapper">
+                <div class="editor-toolbar">
+                    <button type="button" class="toolbar-btn" data-action="bold" title="Bold">
+                        <i class="fas fa-bold"></i>
+                    </button>
+                    <button type="button" class="toolbar-btn" data-action="italic" title="Italic">
+                        <i class="fas fa-italic"></i>
+                    </button>
+                    <button type="button" class="toolbar-btn" data-action="heading" data-level="1" title="Heading 1">
+                        <i class="fas fa-heading"></i><sub>1</sub>
+                    </button>
+                    <button type="button" class="toolbar-btn" data-action="heading" data-level="2" title="Heading 2">
+                        <i class="fas fa-heading"></i><sub>2</sub>
+                    </button>
+                    <button type="button" class="toolbar-btn" data-action="heading" data-level="3" title="Heading 3">
+                        <i class="fas fa-heading"></i><sub>3</sub>
+                    </button>
+                    <span class="toolbar-divider"></span>
+                    <button type="button" class="toolbar-btn" data-action="link" title="Link">
+                        <i class="fas fa-link"></i>
+                    </button>
+                    <button type="button" class="toolbar-btn" data-action="image" title="Image">
+                        <i class="fas fa-image"></i>
+                    </button>
+                    <button type="button" class="toolbar-btn" data-action="code" title="Code">
+                        <i class="fas fa-code"></i>
+                    </button>
+                    <button type="button" class="toolbar-btn" data-action="codeblock" title="Code Block">
+                        <i class="fas fa-file-code"></i>
+                    </button>
+                    <span class="toolbar-divider"></span>
+                    <button type="button" class="toolbar-btn" data-action="ul" title="Unordered List">
+                        <i class="fas fa-list-ul"></i>
+                    </button>
+                    <button type="button" class="toolbar-btn" data-action="ol" title="Ordered List">
+                        <i class="fas fa-list-ol"></i>
+                    </button>
+                    <button type="button" class="toolbar-btn" data-action="blockquote" title="Blockquote">
+                        <i class="fas fa-quote-left"></i>
+                    </button>
+                    <button type="button" class="toolbar-btn" data-action="hr" title="Horizontal Rule">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+                
+                <div class="editor-content">
+                    <textarea name="content" id="id_content" placeholder="Write your post content here using Markdown...">{{ post.content|default:'' }}</textarea>
+                    {% if form.content.errors %}
+                    <div class="field-error">{{ form.content.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="preview-pane" id="preview-pane" style="display:none;">
+                <div class="preview-toolbar">
+                    <button type="button" id="back-to-edit" class="btn btn-sm btn-outline">
+                        <i class="fas fa-arrow-left"></i> Back to Editor
+                    </button>
+                </div>
+                <div class="markdown-content" id="preview-content"></div>
+            </div>
+        </div>
+        
+        <div class="form-group publish-options">
+            <div class="checkbox-group">
+                <input type="checkbox" name="is_featured" id="id_is_featured" {% if post.is_featured %}checked{% endif %}>
+                <label for="id_is_featured">Feature this post</label>
+            </div>
+            
+            <div class="checkbox-group">
+                <input type="checkbox" name="allow_comments" id="id_allow_comments" {% if post.allow_comments %}checked{% endif %} checked>
+                <label for="id_allow_comments">Allow comments</label>
+            </div>
+        </div>
+        
+        <div class="form-actions">
+            <a href="{% if post %}{% url 'blog:post_detail' post.slug %}{% else %}{% url 'blog:post_list' %}{% endif %}" class="btn btn-outline">Cancel</a>
+            <button type="submit" name="save_draft" value="true" class="btn btn-outline mobile-only">Save Draft</button>
+            <button type="submit" name="publish" value="true" class="btn btn-primary mobile-only">{% if post.is_published %}Update{% else %}Publish{% endif %}</button>
+        </div>
+    </form>
+
+    <div class="image-upload-modal" id="image-upload-modal" style="display:none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Insert Image</h3>
+                <button type="button" class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="tabs">
+                    <button type="button" class="tab-btn active" data-tab="upload">Upload</button>
+                    <button type="button" class="tab-btn" data-tab="url">URL</button>
+                    <button type="button" class="tab-btn" data-tab="gallery">Gallery</button>
+                </div>
+                
+                <div class="tab-content" id="upload-tab">
+                    <div class="upload-area">
+                        <input type="file" id="image-upload" accept="image/*">
+                        <div class="upload-placeholder">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Drag and drop an image or click to browse</p>
+                        </div>
+                        <div class="upload-preview" style="display:none;">
+                            <img id="upload-preview-img" src="" alt="Preview">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="image-alt-text">Alt Text</label>
+                        <input type="text" id="image-alt-text" placeholder="Describe the image...">
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="url-tab" style="display:none;">
+                    <div class="form-group">
+                        <label for="image-url">Image URL</label>
+                        <input type="url" id="image-url" placeholder="https://...">
+                    </div>
+                    <div class="form-group">
+                        <label for="image-alt-text-url">Alt Text</label>
+                        <input type="text" id="image-alt-text-url" placeholder="Describe the image...">
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="gallery-tab" style="display:none;">
+                    <div class="image-gallery">
+                        <!-- Images will be loaded here dynamically -->
+                        <div class="empty-gallery">
+                            <i class="fas fa-images"></i>
+                            <p>No images in your gallery yet</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline modal-cancel">Cancel</button>
+                <button type="button" class="btn btn-primary" id="insert-image-btn">Insert Image</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/marked.min.js' %}"></script>
+<script src="{% static 'js/prism.js' %}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Markdown editor functionality
+    const contentTextarea = document.getElementById('id_content');
+    const previewButton = document.getElementById('preview-button');
+    const backButton = document.getElementById('back-to-edit');
+    const editorWrapper = document.getElementById('editor-wrapper');
+    const previewPane = document.getElementById('preview-pane');
+    const previewContent = document.getElementById('preview-content');
+    
+    // Set up Markdown parsing
+    const renderer = new marked.Renderer();
+    marked.setOptions({
+        renderer: renderer,
+        highlight: function(code, lang) {
+            if (Prism.languages[lang]) {
+                return Prism.highlight(code, Prism.languages[lang], lang);
+            } else {
+                return code;
+            }
+        },
+        pedantic: false,
+        gfm: true,
+        breaks: true,
+        sanitize: false,
+        smartLists: true,
+        smartypants: true,
+        xhtml: false
+    });
+    
+    // Preview functionality
+    previewButton.addEventListener('click', function() {
+        previewContent.innerHTML = marked.parse(contentTextarea.value);
+        editorWrapper.style.display = 'none';
+        previewPane.style.display = 'block';
+        
+        // Apply syntax highlighting to code blocks in preview
+        Prism.highlightAll();
+    });
+    
+    backButton.addEventListener('click', function() {
+        previewPane.style.display = 'none';
+        editorWrapper.style.display = 'block';
+    });
+    
+    // Toolbar buttons functionality
+    document.querySelectorAll('.toolbar-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const textarea = contentTextarea;
+            const action = this.getAttribute('data-action');
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const text = textarea.value;
+            const selectedText = text.substring(start, end);
+            
+            let replacement = '';
+            let cursorOffset = 0;
+            
+            switch(action) {
+                case 'bold':
+                    replacement = `**${selectedText}**`;
+                    cursorOffset = selectedText ? 0 : -2;
+                    break;
+                    
+                case 'italic':
+                    replacement = `*${selectedText}*`;
+                    cursorOffset = selectedText ? 0 : -1;
+                    break;
+                    
+                case 'heading':
+                    const level = this.getAttribute('data-level');
+                    const hashtags = '#'.repeat(parseInt(level));
+                    const newline = (start > 0 && text.charAt(start-1) !== '\n') ? '\n' : '';
+                    replacement = `${newline}${hashtags} ${selectedText}`;
+                    cursorOffset = selectedText ? 0 : 0;
+                    break;
+                    
+                case 'link':
+                    replacement = selectedText ? `[${selectedText}](url)` : '[link text](url)';
+                    cursorOffset = selectedText ? -1 : -1;
+                    break;
+                    
+                case 'image':
+                    showImageUploadModal();
+                    return;
+                    
+                case 'code':
+                    replacement = `\`${selectedText}\``;
+                    cursorOffset = selectedText ? 0 : -1;
+                    break;
+                    
+                case 'codeblock':
+                    replacement = `\`\`\`\n${selectedText}\n\`\`\``;
+                    cursorOffset = selectedText ? 0 : -4;
+                    break;
+                    
+                case 'ul':
+                    if (selectedText) {
+                        replacement = selectedText.split('\n').map(line => `- ${line}`).join('\n');
+                    } else {
+                        replacement = '- ';
+                    }
+                    break;
+                    
+                case 'ol':
+                    if (selectedText) {
+                        replacement = selectedText.split('\n').map((line, i) => `${i+1}. ${line}`).join('\n');
+                    } else {
+                        replacement = '1. ';
+                    }
+                    break;
+                    
+                case 'blockquote':
+                    if (selectedText) {
+                        replacement = selectedText.split('\n').map(line => `> ${line}`).join('\n');
+                    } else {
+                        replacement = '> ';
+                    }
+                    break;
+                    
+                case 'hr':
+                    const newlineHr = (start > 0 && text.charAt(start-1) !== '\n') ? '\n' : '';
+                    replacement = `${newlineHr}---\n`;
+                    break;
+            }
+            
+            // Insert the replacement text
+            textarea.value = text.substring(0, start) + replacement + text.substring(end);
+            
+            // Set the cursor position
+            const newCursorPos = selectedText ? start + replacement.length : start + replacement.length + cursorOffset;
+            textarea.setSelectionRange(newCursorPos, newCursorPos);
+            
+            // Focus back on the textarea
+            textarea.focus();
+        });
+    });
+    
+    // Image upload modal functionality
+    const imageUploadModal = document.getElementById('image-upload-modal');
+    const closeModalButtons = document.querySelectorAll('.close-modal, .modal-cancel');
+    
+    function showImageUploadModal() {
+        imageUploadModal.style.display = 'block';
+    }
+    
+    closeModalButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            imageUploadModal.style.display = 'none';
+        });
+    });
+    
+    // Tab switching
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    tabButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            // Remove active class from all tabs
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Hide all tab content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.style.display = 'none';
+            });
+            
+            // Show selected tab
+            const tabId = this.getAttribute('data-tab') + '-tab';
+            document.getElementById(tabId).style.display = 'block';
+        });
+    });
+    
+    // Image upload handling
+    const uploadInput = document.getElementById('image-upload');
+    const uploadPreview = document.querySelector('.upload-preview');
+    const uploadPreviewImg = document.getElementById('upload-preview-img');
+    const uploadPlaceholder = document.querySelector('.upload-placeholder');
+    
+    uploadInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file && file.type.match('image.*')) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                uploadPreviewImg.src = e.target.result;
+                uploadPreview.style.display = 'block';
+                uploadPlaceholder.style.display = 'none';
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+    
+    // Insert image functionality
+    const insertImageBtn = document.getElementById('insert-image-btn');
+    insertImageBtn.addEventListener('click', function() {
+        const activeTab = document.querySelector('.tab-btn.active').getAttribute('data-tab');
+        let imageUrl = '';
+        let altText = '';
+        
+        if (activeTab === 'upload') {
+            if (uploadPreviewImg.src) {
+                // For the demo, we'll use the preview src
+                // In a real implementation, you'd upload the file and get a URL
+                imageUrl = uploadPreviewImg.src;
+                altText = document.getElementById('image-alt-text').value;
+            } else {
+                alert('Please select an image to upload');
+                return;
+            }
+        } else if (activeTab === 'url') {
+            imageUrl = document.getElementById('image-url').value;
+            altText = document.getElementById('image-alt-text-url').value;
+            if (!imageUrl) {
+                alert('Please enter an image URL');
+                return;
+            }
+        } else if (activeTab === 'gallery') {
+            const selectedImage = document.querySelector('.gallery-image.selected');
+            if (selectedImage) {
+                imageUrl = selectedImage.getAttribute('data-url');
+                altText = selectedImage.getAttribute('alt');
+            } else {
+                alert('Please select an image from the gallery');
+                return;
+            }
+        }
+        
+        // Insert the image Markdown
+        const textarea = contentTextarea;
+        const markdownImage = `![${altText}](${imageUrl})`;
+        const start = textarea.selectionStart;
+        const end = textarea.selectionEnd;
+        const text = textarea.value;
+        
+        textarea.value = text.substring(0, start) + markdownImage + text.substring(end);
+        
+        // Set cursor position after the inserted image
+        const newCursorPos = start + markdownImage.length;
+        textarea.setSelectionRange(newCursorPos, newCursorPos);
+        
+        // Close the modal and reset
+        imageUploadModal.style.display = 'none';
+        uploadPreview.style.display = 'none';
+        uploadPlaceholder.style.display = 'block';
+        uploadInput.value = '';
+        document.getElementById('image-alt-text').value = '';
+        document.getElementById('image-url').value = '';
+        document.getElementById('image-alt-text-url').value = '';
+        
+        // Focus back on the textarea
+        textarea.focus();
+    });
+    
+    // Featured image preview
+    const featuredImageInput = document.getElementById('id_featured_image');
+    featuredImageInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file && file.type.match('image.*')) {
+            const reader = new FileReader();
+            const fileLabel = this.nextElementSibling.querySelector('span');
+            
+            reader.onload = function(e) {
+                fileLabel.textContent = file.name;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+    
+    // Auto-save draft functionality (every 60 seconds)
+    let lastContent = contentTextarea.value;
+    let autoSaveInterval = setInterval(function() {
+        const currentContent = contentTextarea.value;
+        if (currentContent !== lastContent && currentContent.trim() !== '') {
+            lastContent = currentContent;
+            localStorage.setItem('post_draft', currentContent);
+            localStorage.setItem('post_draft_time', new Date().toISOString());
+            
+            // Show autosave notification
+            const notification = document.createElement('div');
+            notification.className = 'autosave-notification';
+            notification.innerHTML = '<i class="fas fa-save"></i> Draft auto-saved';
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 500);
+            }, 2000);
+        }
+    }, 60000);
+    
+    // Check for saved draft on page load
+    const savedDraft = localStorage.getItem('post_draft');
+    const savedTime = localStorage.getItem('post_draft_time');
+    
+    if (savedDraft && !contentTextarea.value && savedTime) {
+        const saveDate = new Date(savedTime);
+        const now = new Date();
+        const diffHours = Math.abs(now - saveDate) / 36e5;
+        
+        // Only restore if the draft is less than 24 hours old
+        if (diffHours < 24) {
+            const restoreDraft = confirm(`You have an unsaved draft from ${saveDate.toLocaleString()}. Do you want to restore it?`);
+            if (restoreDraft) {
+                contentTextarea.value = savedDraft;
+            } else {
+                localStorage.removeItem('post_draft');
+                localStorage.removeItem('post_draft_time');
+            }
+        } else {
+            localStorage.removeItem('post_draft');
+            localStorage.removeItem('post_draft_time');
+        }
+    }
+    
+    // Clear draft when form is submitted
+    document.getElementById('post-form').addEventListener('submit', function() {
+        localStorage.removeItem('post_draft');
+        localStorage.removeItem('post_draft_time');
+        clearInterval(autoSaveInterval);
+    });
+});
+</script>
+{% endblock %} 

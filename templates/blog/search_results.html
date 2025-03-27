@@ -1,0 +1,29 @@
+{% extends 'blog/post_list.html' %}
+{% load static %}
+
+{% block title %}Search results for "{{ query }}" - Markdown Blog{% endblock %}
+
+{% block page_header %}
+<div class="page-header">
+    <h1 class="page-title">Search results for "{{ query }}"</h1>
+    <p class="page-description">Found {{ results_count }} result{% if results_count != 1 %}s{% endif %}</p>
+</div>
+{% endblock %}
+
+{% block search_form %}
+<div class="search-container">
+    <form action="{% url 'blog:search' %}" method="get" class="search-form">
+        <input type="text" name="q" placeholder="Search articles..." value="{{ query }}">
+        <button type="submit"><i class="fas fa-search"></i></button>
+    </form>
+</div>
+{% endblock %}
+
+{% block empty_state %}
+<div class="empty-state">
+    <i class="fas fa-search empty-icon"></i>
+    <h3>No Posts Found</h3>
+    <p>Sorry, no posts match your search for "{{ query }}".</p>
+    <a href="{% url 'blog:post_list' %}" class="btn btn-outline">View All Articles</a>
+</div>
+{% endblock %} 

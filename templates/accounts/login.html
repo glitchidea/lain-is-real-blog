@@ -1,0 +1,280 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Login - Markdown Blog{% endblock %}
+
+{% block content %}
+<div class="auth-page">
+    <div class="auth-form-container">
+        <h1 class="auth-title">Login</h1>
+        
+        <form method="post" class="auth-form">
+            {% csrf_token %}
+            
+            {% include 'includes/form_errors.html' with errors=form.non_field_errors %}
+            
+            <div class="form-group">
+                <label for="{{ form.username.id_for_label }}">Username or Email</label>
+                <input type="text" name="{{ form.username.html_name }}" id="{{ form.username.id_for_label }}" class="form-control" placeholder="Your username or email address">
+                {% if form.username.errors %}
+                <div class="field-error">
+                    {% for error in form.username.errors %}
+                    {{ error }}
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.password.id_for_label }}">Password</label>
+                <input type="password" name="{{ form.password.html_name }}" id="{{ form.password.id_for_label }}" class="form-control" placeholder="Your password">
+                {% if form.password.errors %}
+                <div class="field-error">
+                    {% for error in form.password.errors %}
+                    {{ error }}
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            
+            {% if form.remember_me %}
+            <div class="form-group checkbox-group">
+                <input type="checkbox" name="{{ form.remember_me.html_name }}" id="{{ form.remember_me.id_for_label }}" class="form-check-input">
+                <label for="{{ form.remember_me.id_for_label }}" class="form-check-label">Remember Me</label>
+            </div>
+            {% endif %}
+            
+            <div class="auth-actions">
+                <button type="submit" class="btn btn-primary">Login</button>
+            </div>
+            
+            <div class="auth-links">
+                <p>Don't have an account? <a href="{% url 'accounts:register' %}">Register</a></p>
+                <p><a href="{% url 'account_reset_password' %}">Forgot your password?</a></p>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    .auth-page {
+        display: flex;
+        justify-content: center;
+        padding: 40px 0;
+    }
+    
+    .auth-form-container {
+        background-color: rgba(0, 0, 0, 0.7);
+        border: 1px solid rgba(0, 184, 212, 0.3);
+        box-shadow: 0 0 15px rgba(0, 184, 212, 0.2);
+        padding: 30px;
+        width: 100%;
+        max-width: 450px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .auth-form-container::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: repeating-linear-gradient(
+            0deg,
+            rgba(0, 0, 0, 0.1),
+            rgba(0, 0, 0, 0.1) 1px,
+            transparent 1px,
+            transparent 2px
+        );
+        pointer-events: none;
+        opacity: 0.2;
+        z-index: -1;
+    }
+    
+    .auth-form-container::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: linear-gradient(to right, 
+            transparent, 
+            rgba(0, 184, 212, 0.5),
+            rgba(51, 255, 51, 0.5),
+            transparent
+        );
+        animation: scan-border 3s ease-in-out infinite;
+    }
+    
+    @keyframes scan-border {
+        0%, 100% { transform: translateX(-100%); }
+        50% { transform: translateX(100%); }
+    }
+    
+    .auth-title {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #00b8d4;
+        font-size: 24px;
+        font-family: 'Share Tech Mono', monospace;
+        position: relative;
+    }
+    
+    .auth-title::before {
+        content: "> ";
+        color: #33ff33;
+        position: absolute;
+        left: -20px;
+    }
+    
+    .auth-form .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .auth-form label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: #00b8d4;
+        font-family: 'Share Tech Mono', monospace;
+    }
+    
+    .auth-form label::before {
+        content: "> ";
+        color: #33ff33;
+    }
+    
+    .auth-form .form-control {
+        width: 100%;
+        padding: 10px 15px;
+        background-color: rgba(0, 0, 0, 0.5);
+        border: 1px solid rgba(0, 184, 212, 0.3);
+        border-radius: 0;
+        color: #e0e0e0;
+        font-family: 'Share Tech Mono', monospace;
+        font-size: 14px;
+        transition: all 0.3s ease;
+    }
+    
+    .auth-form .form-control:focus {
+        border-color: #33ff33;
+        outline: none;
+        box-shadow: 0 0 10px rgba(51, 255, 51, 0.2);
+        background-color: rgba(0, 0, 0, 0.7);
+    }
+    
+    .auth-form .checkbox-group {
+        display: flex;
+        align-items: center;
+    }
+    
+    .auth-form .form-check-input {
+        margin-right: 10px;
+        appearance: none;
+        -webkit-appearance: none;
+        width: 18px;
+        height: 18px;
+        background-color: rgba(0, 0, 0, 0.5);
+        border: 1px solid rgba(0, 184, 212, 0.3);
+        position: relative;
+        cursor: pointer;
+        vertical-align: middle;
+    }
+    
+    .auth-form .form-check-input:checked {
+        background-color: rgba(51, 255, 51, 0.1);
+        border-color: #33ff33;
+    }
+    
+    .auth-form .form-check-input:checked::after {
+        content: '✓';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: #33ff33;
+        font-size: 12px;
+    }
+    
+    .auth-form .form-check-label {
+        display: inline;
+        margin: 0;
+        color: #e0e0e0;
+        font-family: 'Share Tech Mono', monospace;
+        font-size: 14px;
+    }
+    
+    .field-error {
+        color: #ff3366;
+        font-family: 'Share Tech Mono', monospace;
+        font-size: 14px;
+        margin-top: 5px;
+        padding: 5px;
+        background-color: rgba(255, 51, 102, 0.1);
+        border-left: 3px solid #ff3366;
+    }
+    
+    .field-help {
+        color: #aaa;
+        font-family: 'Share Tech Mono', monospace;
+        font-size: 13px;
+        margin-top: 5px;
+    }
+    
+    .auth-actions {
+        margin-top: 30px;
+    }
+    
+    .auth-actions .btn-primary {
+        background-color: transparent;
+        border: 1px solid #00b8d4;
+        color: #00b8d4;
+        padding: 10px 25px;
+        cursor: pointer;
+        font-family: 'Share Tech Mono', monospace;
+        text-transform: lowercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .auth-actions .btn-primary:hover {
+        background-color: rgba(0, 184, 212, 0.1);
+        color: #33ff33;
+        border-color: #33ff33;
+    }
+    
+    .auth-links {
+        margin-top: 20px;
+        text-align: center;
+        font-family: 'Share Tech Mono', monospace;
+    }
+    
+    .auth-links p {
+        margin: 10px 0;
+        color: #aaa;
+    }
+    
+    .auth-links a {
+        color: #00b8d4;
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+    
+    .auth-links a:hover {
+        color: #33ff33;
+        text-decoration: underline;
+    }
+    
+    @media (max-width: 768px) {
+        .auth-form-container {
+            padding: 20px;
+            margin: 0 15px;
+        }
+    }
+</style>
+{% endblock %} 

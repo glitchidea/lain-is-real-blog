@@ -1,0 +1,189 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Edit Profile | Lain Nexus{% endblock %}
+
+{% block content %}
+<div class="form-container lain-form-container">
+    <div class="form-header">
+        <h1 class="profile-edit">Edit Profile</h1>
+    </div>
+    
+    {% if messages %}
+    <div class="notification {% if message.tags %}{{ message.tags }}{% endif %}">
+        {% for message in messages %}
+        {{ message }}
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <form method="post" enctype="multipart/form-data" class="lain-form">
+        {% csrf_token %}
+        
+        {% include 'includes/form_errors.html' with errors=form.non_field_errors %}
+        
+        <div class="avatar-section">
+            <h3>Avatar</h3>
+            
+            <div class="avatar-preview lain-avatar-preview">
+                {% if user.profile.avatar %}
+                <img src="{{ user.profile.avatar.url }}" alt="{{ user.username }}">
+                {% else %}
+                <span>{{ user.username|first|upper }}</span>
+                {% endif %}
+            </div>
+            
+            <div class="avatar-upload">
+                <label class="avatar-upload-btn">
+                    <i class="fas fa-upload"></i> Select Avatar
+                    <input type="file" name="{{ form.avatar.html_name }}" id="{{ form.avatar.id_for_label }}">
+                </label>
+            </div>
+            
+            <div class="limitations-info">
+                <ul>
+                    <li><i class="fas fa-check"></i> <span>Only PNG, JPG and JPEG formats are accepted</span></li>
+                    <li><i class="fas fa-check"></i> <span>Maximum file size: 5MB</span></li>
+                    <li><i class="fas fa-check"></i> <span>Recommended size: 500x500 pixels</span></li>
+                    <li><i class="fas fa-info-circle"></i> <span>Uploaded images are automatically resized and compressed</span></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <div class="form-column">
+                <div class="form-group lain-form-group">
+                    <label for="{{ form.first_name.id_for_label }}">First Name</label>
+                    <input type="text" name="{{ form.first_name.html_name }}" id="{{ form.first_name.id_for_label }}" value="{{ form.first_name.value|default:'' }}" placeholder="First Name" class="lain-input">
+                    {% if form.first_name.errors %}
+                    <div class="field-error">
+                        {% for error in form.first_name.errors %}
+                        {{ error }}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="form-column">
+                <div class="form-group lain-form-group">
+                    <label for="{{ form.last_name.id_for_label }}">Last Name</label>
+                    <input type="text" name="{{ form.last_name.html_name }}" id="{{ form.last_name.id_for_label }}" value="{{ form.last_name.value|default:'' }}" placeholder="Last Name" class="lain-input">
+                    {% if form.last_name.errors %}
+                    <div class="field-error">
+                        {% for error in form.last_name.errors %}
+                        {{ error }}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-group lain-form-group">
+            <label for="{{ form.email.id_for_label }}">Email <span>(cannot be changed)</span></label>
+            <input type="email" name="{{ form.email.html_name }}" id="{{ form.email.id_for_label }}" value="{{ form.email.value|default:'' }}" placeholder="email@domain.com" readonly class="lain-input">
+            {% if form.email.errors %}
+            <div class="field-error">
+                {% for error in form.email.errors %}
+                {{ error }}
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        
+        {% if form.bio %}
+        <div class="form-group lain-form-group">
+            <label for="{{ form.bio.id_for_label }}">Bio</label>
+            <textarea name="{{ form.bio.html_name }}" id="{{ form.bio.id_for_label }}" rows="4" placeholder="Tell us about yourself..." class="lain-textarea">{{ form.bio.value|default:'' }}</textarea>
+            {% if form.bio.errors %}
+            <div class="field-error">
+                {% for error in form.bio.errors %}
+                {{ error }}
+                {% endfor %}
+            </div>
+            {% endif %}
+            <div class="help-text">A brief description about yourself, your interests, and your expertise.</div>
+        </div>
+        {% endif %}
+        
+        <div class="form-group lain-form-group">
+            <label for="{{ form.website.id_for_label }}">Website</label>
+            <input type="url" name="{{ form.website.html_name }}" id="{{ form.website.id_for_label }}" value="{{ form.website.value|default:'' }}" placeholder="https://example.com" class="lain-input">
+            {% if form.website.errors %}
+            <div class="field-error">
+                {% for error in form.website.errors %}
+                {{ error }}
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        
+        <div class="form-group lain-form-group">
+            <label for="{{ form.location.id_for_label }}">Location</label>
+            <input type="text" name="{{ form.location.html_name }}" id="{{ form.location.id_for_label }}" value="{{ form.location.value|default:'' }}" placeholder="City, Country" class="lain-input">
+            {% if form.location.errors %}
+            <div class="field-error">
+                {% for error in form.location.errors %}
+                {{ error }}
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        
+        <div class="form-group lain-form-group">
+            <label for="{{ form.birth_date.id_for_label }}">Birth Date</label>
+            <input type="date" name="{{ form.birth_date.html_name }}" id="{{ form.birth_date.id_for_label }}" value="{{ form.birth_date.value|date:'Y-m-d'|default:'' }}" class="lain-input">
+            {% if form.birth_date.errors %}
+            <div class="field-error">
+                {% for error in form.birth_date.errors %}
+                {{ error }}
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        
+        <div class="social-links-section">
+            <h3 class="social-links-title">Social Links</h3>
+            
+            <div class="form-group lain-form-group">
+                <label for="website_link">
+                    <i class="fas fa-globe"></i> Website
+                </label>
+                <input type="url" id="website_link" name="website_link" placeholder="https://yoursite.com" class="lain-input">
+            </div>
+            
+            <div class="form-group lain-form-group">
+                <label for="twitter_link">
+                    <i class="fab fa-twitter"></i> Twitter
+                </label>
+                <input type="url" id="twitter_link" name="twitter_link" placeholder="https://twitter.com/username" class="lain-input">
+            </div>
+            
+            <div class="form-group lain-form-group">
+                <label for="linkedin_link">
+                    <i class="fab fa-linkedin"></i> LinkedIn
+                </label>
+                <input type="url" id="linkedin_link" name="linkedin_link" placeholder="https://linkedin.com/in/username" class="lain-input">
+            </div>
+            
+            <div class="form-group lain-form-group">
+                <label for="github_link">
+                    <i class="fab fa-github"></i> GitHub
+                </label>
+                <input type="url" id="github_link" name="github_link" placeholder="https://github.com/username" class="lain-input">
+            </div>
+        </div>
+        
+        <div class="form-checkbox">
+            <input type="checkbox" id="subscribe_newsletter" name="subscribe_newsletter" class="lain-checkbox">
+            <label for="subscribe_newsletter">Subscribe to Newsletter</label>
+        </div>
+        
+        <div class="form-actions">
+            <button type="button" class="btn-cancel">Cancel</button>
+            <button type="submit" class="btn-submit">Save</button>
+        </div>
+    </form>
+</div>
+{% endblock %} 
