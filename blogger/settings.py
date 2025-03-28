@@ -31,7 +31,7 @@ SECRET_KEY = "django-insecure-key-replace-in-production"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.0.24', '0.0.0.0', '*', 'https://lain.glitchsec.uno']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '*', '0.0.0.0']
 
 
 # Application definition
@@ -296,46 +296,100 @@ CKEDITOR_RESTRICT_BY_USER = True
 CKEDITOR_BROWSE_SHOW_DIRS = True
 CKEDITOR_ALLOW_NONIMAGE_FILES = False  # Sadece görsel yükleyebilmek için
 
-# CKEditor 5 yapılandırması
-DJANGO_CKEDITOR_5_CONFIGS = {
+# Django CKEditor 5 Settings
+customColorPalette = [
+    {"color": "hsl(4, 90%, 58%)", "label": "Red"},
+    {"color": "hsl(340, 82%, 52%)", "label": "Pink"},
+    {"color": "hsl(291, 64%, 42%)", "label": "Purple"},
+    {"color": "hsl(262, 52%, 47%)", "label": "Deep Purple"},
+    {"color": "hsl(231, 48%, 48%)", "label": "Indigo"},
+    {"color": "hsl(207, 90%, 54%)", "label": "Blue"},
+    {"color": "hsl(199, 98%, 48%)", "label": "Light Blue"},
+    {"color": "hsl(187, 100%, 42%)", "label": "Cyan"},
+    {"color": "hsl(174, 100%, 29%)", "label": "Teal"},
+    {"color": "hsl(122, 39%, 49%)", "label": "Green"},
+    {"color": "hsl(88, 50%, 53%)", "label": "Light Green"},
+    {"color": "hsl(66, 70%, 54%)", "label": "Lime"},
+    {"color": "hsl(49, 98%, 60%)", "label": "Yellow"},
+    {"color": "hsl(45, 100%, 51%)", "label": "Amber"},
+    {"color": "hsl(36, 100%, 50%)", "label": "Orange"},
+    {"color": "hsl(14, 91%, 54%)", "label": "Deep Orange"},
+    {"color": "hsl(15, 25%, 34%)", "label": "Brown"},
+    {"color": "hsl(0, 0%, 62%)", "label": "Grey"},
+    {"color": "hsl(200, 18%, 46%)", "label": "Blue Grey"},
+    {"color": "hsl(200, 100%, 11%)", "label": "Dark Blue"},
+    {"color": "hsl(0, 0%, 0%)", "label": "Black"},
+    {"color": "hsl(0, 0%, 100%)", "label": "White"},
+]
+
+CKEDITOR_5_CONFIGS = {
     'default': {
-        'toolbar': ['heading', '|', 'bold', 'italic', 'link',
-                   'bulletedList', 'numberedList', 'blockQuote', 'imageUpload', '|',
-                   'insertTable', 'mediaEmbed', 'undo', 'redo', '|',
-                   'code', 'codeBlock', '|',
-                   'fontBackgroundColor', 'fontColor', 'fontSize', 'fontFamily'],
+        'toolbar': [
+            'heading', '|',
+            'bold', 'italic', 'link', 'bulletedList', 'numberedList', '|',
+            'outdent', 'indent', '|',
+            'imageUpload', 'blockQuote', 'insertTable', 'mediaEmbed', '|',
+            'undo', 'redo', '|',
+            'sourceEditing'
+        ],
+        'heading': {
+            'options': [
+                {'model': 'paragraph', 'title': 'Paragraph', 'class': 'ck-heading_paragraph'},
+                {'model': 'heading1', 'view': 'h1', 'title': 'Heading 1', 'class': 'ck-heading_heading1'},
+                {'model': 'heading2', 'view': 'h2', 'title': 'Heading 2', 'class': 'ck-heading_heading2'},
+                {'model': 'heading3', 'view': 'h3', 'title': 'Heading 3', 'class': 'ck-heading_heading3'}
+            ]
+        },
         'image': {
-            'toolbar': ['imageTextAlternative', 'imageStyle:alignLeft', 'imageStyle:full', 'imageStyle:alignRight'],
-            'styles': [
-                'full', 'alignLeft', 'alignRight',
+            'toolbar': [
+                'imageTextAlternative', '|',
+                'imageStyle:alignLeft', 'imageStyle:alignCenter', 'imageStyle:alignRight', '|',
+                'linkImage'
             ],
+            'styles': [
+                'alignLeft', 'alignCenter', 'alignRight'
+            ],
+            'resizeUnit': 'px'
         },
         'table': {
-            'contentToolbar': [ 'tableColumn', 'tableRow', 'mergeTableCells' ],
+            'contentToolbar': [
+                'tableColumn',
+                'tableRow',
+                'mergeTableCells',
+                'tableProperties',
+                'tableCellProperties'
+            ]
         },
-        'height': 500,
-        'width': '100%',
-    },
-    'blog_content': {
-        'toolbar': ['heading', '|', 'outdent', 'indent', '|', 'bold', 'italic', 'link', 'underline', '|',
-                 'bulletedList', 'numberedList', 'todoList', '|',
-                 'blockQuote', 'imageUpload', '|',
-                 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'highlight', '|',
-                 'alignment', 'insertTable', 'horizontalLine', 'pageBreak', '|',
-                 'sourceEditing', 'code', 'codeBlock', '|',
-                 'subscript', 'superscript', 'strikethrough', '|',
-                 'specialCharacters', 'mediaEmbed', 'htmlEmbed', '|',
-                 'undo', 'redo'],
-        'image': {
-            'toolbar': ['imageTextAlternative', 'imageStyle:alignLeft', 'imageStyle:full', 'imageStyle:alignRight'],
-            'styles': [
-                'full', 'alignLeft', 'alignRight',
-            ],
+        'fontSize': {
+            'options': [
+                9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 25, 27, 29, 31, 33, 35
+            ]
         },
-        'table': {
-            'contentToolbar': [ 'tableColumn', 'tableRow', 'mergeTableCells' ]
+        'fontFamily': {
+            'options': [
+                'default',
+                'Arial, Helvetica, sans-serif',
+                'Courier New, Courier, monospace',
+                'Georgia, serif',
+                'Lucida Sans Unicode, Lucida Grande, sans-serif',
+                'Tahoma, Geneva, sans-serif',
+                'Times New Roman, Times, serif',
+                'Trebuchet MS, Helvetica, sans-serif',
+                'Verdana, Geneva, sans-serif'
+            ]
         },
-        'height': 500,
-        'width': '100%',
+        'fontColor': {
+            'colors': customColorPalette
+        },
+        'fontBackgroundColor': {
+            'colors': customColorPalette
+        },
     }
+}
+
+# CKEditor 5 Upload Settings
+CKEDITOR_5_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
+CKEDITOR_5_UPLOAD_PATH = "uploads/ckeditor5/"
+CKEDITOR_5_CONFIGS_PROXY = {
+    'default': 'blogger.ckeditor5_configs.DefaultConfig'
 }
