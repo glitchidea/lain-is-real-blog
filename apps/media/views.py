@@ -4,13 +4,17 @@ from django.http import JsonResponse, HttpResponseForbidden
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_POST, require_http_methods
+from django.core.files.storage import default_storage
+from django.conf import settings
+import os
+import mimetypes
+from pathlib import Path
 
 from .models import MediaFile, Gallery, GalleryItem
 from .forms import MediaFileForm, BulkUploadForm, GalleryForm, GalleryItemForm, GalleryItemBulkForm
 
 import logging
-import mimetypes
 import json
 
 logger = logging.getLogger('apps')
@@ -68,67 +72,55 @@ def media_dashboard(request):
 
 
 @login_required
+@require_http_methods(["POST"])
 def upload_media(request):
-    """View for uploading media files."""
-    if request.method == 'POST':
-        form = MediaFileForm(request.POST, request.FILES)
-        if form.is_valid():
-            media_file = form.save(commit=False)
-            media_file.uploaded_by = request.user
-            media_file.save()
-            messages.success(request, "File uploaded successfully.")
-            return redirect('media:dashboard')
-    else:
-        form = MediaFileForm()
+    if 'upload' not in request.FILES:
+        return JsonResponse({'error': 'No file was uploaded.'}, status=400)
     
-    # For bulk uploads
-    bulk_form = BulkUploadForm()
+    uploaded_file = request.FILES['upload']
+    content_type = uploaded_file.content_type
     
-    context = {
-        'form': form,
-        'bulk_form': bulk_form,
-    }
+    if content_type not in settings.MEDIA_LIBRARY_ALLOWED_TYPES:
+        return JsonResponse({'error': 'File type not allowed.'}, status=400)
     
-    return render(request, 'media/upload_form.html', context)
+    # Generate a unique filename
+    filename = uploaded_file.name
+    path = os.path.join(settings.MEDIA_LIBRARY_UPLOAD_PATH, filename)
+    
+    # Save the file
+    path = default_storage.save(path, uploaded_file)
+    url = default_storage.url(path)
+    
+    return JsonResponse({
+        'url': url,
+        'fileName': filename,
+        'uploaded': True
+    })
 
 
 @login_required
 def browse_media(request):
-    """Browse all media files for inserting into content."""
-    media_files = MediaFile.objects.filter(
-        Q(uploaded_by=request.user) | Q(is_public=True)
-    ).order_by('-created_at')
+    files = []
+    media_path = Path(settings.MEDIA_ROOT) / settings.MEDIA_LIBRARY_UPLOAD_PATH
     
-    # Filter by type
-    media_type = request.GET.get('type', 'images')  # Default to images
-    media_files = media_files.filter(upload_type=media_type)
+    if media_path.exists():
+        for file_path in media_path.rglob('*'):
+            if file_path.is_file():
+                rel_path = file_path.relative_to(settings.MEDIA_ROOT)
+                url = settings.MEDIA_URL + str(rel_path)
+                mime_type, _ = mimetypes.guess_type(str(file_path))
+                
+                if mime_type in settings.MEDIA_LIBRARY_ALLOWED_TYPES:
+                    files.append({
+                        'url': url,
+                        'fileName': file_path.name,
+                        'fileSize': file_path.stat().st_size,
+                        'type': mime_type
+                    })
     
-    # Search functionality
-    search_query = request.GET.get('q')
-    if search_query:
-        media_files = media_files.filter(
-            Q(title__icontains=search_query) |
-            Q(description__icontains=search_query) |
-            Q(alt_text__icontains=search_query)
-        )
-    
-    # Pagination
-    paginator = Paginator(media_files, 30)  # Show 30 files per page
-    page = request.GET.get('page')
-    try:
-        files = paginator.page(page)
-    except PageNotAnInteger:
-        files = paginator.page(1)
-    except EmptyPage:
-        files = paginator.page(paginator.num_pages)
-    
-    context = {
-        'files': files,
-        'media_type': media_type,
-        'search_query': search_query,
-    }
-    
-    return render(request, 'media/browse.html', context)
+    return JsonResponse({
+        'files': files
+    })
 
 
 @login_required

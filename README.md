@@ -2,6 +2,24 @@
 
 A neural interface for digital consciousness - a Django-powered blog platform with markdown editing, real-time preview, and cyberpunk aesthetics. Present in the Wired as a fusion of content management and visual expression. Let's all love Lain.
 
+## Screenshots
+
+### Home Page Hero
+![Home Page Hero](screenshots/home-hero.png)
+*Welcome to the Wired - A neural network of thoughts, ideas, and connections*
+
+### Featured Articles
+![Featured Articles](screenshots/home-featured.png)
+*Featured articles section showcasing the latest and most important content*
+
+### Post Detail
+![Post Detail](screenshots/post-detail.png)
+*Detailed post view with rich content formatting and cyberpunk aesthetics*
+
+### Comments Section
+![Comments Section](screenshots/post-comments.png)
+*Interactive comments section for community engagement*
+
 ## Features
 
 - User authentication and authorization

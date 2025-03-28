@@ -55,7 +55,7 @@ class Post(models.Model):
     title = models.CharField(_("Title"), max_length=200)
     slug = models.SlugField(_("Slug"), max_length=200, unique=True)
     author = models.ForeignKey(User, verbose_name=_("Author"), on_delete=models.CASCADE, related_name='blog_posts')
-    content = CKEditor5Field(_("Content"), config_name='blog_content')
+    content = CKEditor5Field(_("Content"), config_name='default')
     content_html = models.TextField(_("Content HTML"), blank=True, editable=False)
     excerpt = models.TextField(_("Excerpt"), blank=True, help_text=_("A brief summary of the post. If left blank, it will be auto-generated from content."))
     featured_image = models.ImageField(_("Featured Image"), upload_to='blog/featured_images/%Y/%m/%d/', blank=True, null=True)

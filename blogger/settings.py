@@ -294,160 +294,95 @@ CKEDITOR_5_CONFIGS = {
     'default': {
         'toolbar': [
             'heading', '|',
-            'fontFamily', 'fontSize', 'fontColor', 'fontBackgroundColor', '|',
-            'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', '|',
-            'alignment', '|',
-            'bulletedList', 'numberedList', '|',
-            'outdent', 'indent', '|',
-            'link', 'blockQuote', 'insertTable', 'imageUpload', 'mediaEmbed', '|',
-            'code', 'codeBlock', '|',
-            'undo', 'redo', '|',
-            'sourceEditing'
-        ],
-        'heading': {
-            'options': [
-                {'model': 'paragraph', 'title': 'Paragraph', 'class': 'ck-heading_paragraph'},
-                {'model': 'heading1', 'view': 'h1', 'title': 'Heading 1', 'class': 'ck-heading_heading1'},
-                {'model': 'heading2', 'view': 'h2', 'title': 'Heading 2', 'class': 'ck-heading_heading2'},
-                {'model': 'heading3', 'view': 'h3', 'title': 'Heading 3', 'class': 'ck-heading_heading3'}
-            ]
-        },
-        'image': {
-            'toolbar': [
-                'imageTextAlternative', '|',
-                'imageStyle:inline',
-                'imageStyle:block',
-                'imageStyle:side',
-                'linkImage'
-            ],
-            'styles': [
-                'full',
-                'alignLeft',
-                'alignCenter',
-                'alignRight'
-            ],
-            'resizeOptions': [
-                {
-                    'name': 'resizeImage:original',
-                    'value': None,
-                    'label': 'Original'
-                },
-                {
-                    'name': 'resizeImage:50',
-                    'value': '50',
-                    'label': '50%'
-                },
-                {
-                    'name': 'resizeImage:75',
-                    'value': '75',
-                    'label': '75%'
-                }
-            ],
-            'resizeUnit': '%'
-        },
-        'table': {
-            'contentToolbar': [
-                'tableColumn',
-                'tableRow',
-                'mergeTableCells',
-                'tableProperties',
-                'tableCellProperties'
-            ]
-        },
-        'fontSize': {
-            'options': [
-                9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 25, 27, 29, 31, 33, 35
-            ]
-        },
-        'fontFamily': {
-            'options': [
-                'default',
-                'Arial, Helvetica, sans-serif',
-                'Courier New, Courier, monospace',
-                'Georgia, serif',
-                'Lucida Sans Unicode, Lucida Grande, sans-serif',
-                'Tahoma, Geneva, sans-serif',
-                'Times New Roman, Times, serif',
-                'Trebuchet MS, Helvetica, sans-serif',
-                'Verdana, Geneva, sans-serif'
-            ]
-        },
-        'alignment': {
-            'options': ['left', 'center', 'right', 'justify']
-        },
-        'link': {
-            'decorators': {
-                'openInNewTab': {
-                    'mode': 'manual',
-                    'label': 'Open in a new tab',
-                    'attributes': {
-                        'target': '_blank',
-                        'rel': 'noopener noreferrer'
-                    }
-                }
-            }
-        }
-    },
-    'blog_content': {
-        'toolbar': [
-            'heading', '|',
-            'fontFamily', 'fontSize', 'fontColor', 'fontBackgroundColor', '|',
             'bold', 'italic', 'underline', 'strikethrough', '|',
+            'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', '|',
             'alignment', '|',
-            'bulletedList', 'numberedList', '|',
-            'outdent', 'indent', '|',
+            'numberedList', 'bulletedList', '|',
+            'indent', 'outdent', '|',
             'link', 'blockQuote', 'insertTable', 'imageUpload', 'mediaEmbed', '|',
-            'code', 'codeBlock', '|',
-            'undo', 'redo'
+            'horizontalLine', '|',
+            'sourceEditing', 'removeFormat', '|',
+            'undo', 'redo',
         ],
         'heading': {
             'options': [
                 {'model': 'paragraph', 'title': 'Paragraph', 'class': 'ck-heading_paragraph'},
                 {'model': 'heading1', 'view': 'h1', 'title': 'Heading 1', 'class': 'ck-heading_heading1'},
                 {'model': 'heading2', 'view': 'h2', 'title': 'Heading 2', 'class': 'ck-heading_heading2'},
-                {'model': 'heading3', 'view': 'h3', 'title': 'Heading 3', 'class': 'ck-heading_heading3'}
+                {'model': 'heading3', 'view': 'h3', 'title': 'Heading 3', 'class': 'ck-heading_heading3'},
             ]
         },
         'image': {
             'toolbar': [
-                'imageTextAlternative', '|',
                 'imageStyle:inline',
                 'imageStyle:block',
                 'imageStyle:side',
-                'linkImage'
-            ],
-            'styles': [
-                'full',
-                'alignLeft',
-                'alignCenter',
-                'alignRight'
+                '|',
+                'toggleImageCaption',
+                'imageTextAlternative',
+                '|',
+                'linkImage',
+                '|',
+                'resizeImage:25',
+                'resizeImage:50',
+                'resizeImage:75',
+                'resizeImage:original'
             ],
             'resizeOptions': [
                 {
                     'name': 'resizeImage:original',
-                    'value': None,
-                    'label': 'Original'
-                },
-                {
-                    'name': 'resizeImage:50',
-                    'value': '50',
-                    'label': '50%'
+                    'value': True,
+                    'icon': 'original'
                 },
                 {
                     'name': 'resizeImage:75',
                     'value': '75',
-                    'label': '75%'
+                    'icon': 'large'
+                },
+                {
+                    'name': 'resizeImage:50',
+                    'value': '50',
+                    'icon': 'medium'
+                },
+                {
+                    'name': 'resizeImage:25',
+                    'value': '25',
+                    'icon': 'small'
                 }
             ],
-            'resizeUnit': '%'
+            'resizeUnit': '%',
+            'styles': [
+                'full',
+                'side',
+                'alignLeft',
+                'alignCenter',
+                'alignRight'
+            ],
+            'upload': {
+                'types': ['jpeg', 'png', 'gif', 'bmp', 'webp', 'tiff', 'svg+xml'],
+                'maximum_size': 5 * 1024 * 1024,  # 5MB
+            },
         },
         'table': {
             'contentToolbar': [
                 'tableColumn',
                 'tableRow',
                 'mergeTableCells',
-                'tableProperties',
-                'tableCellProperties'
+                'tableCellProperties',
+                'tableProperties'
+            ]
+        },
+        'mediaEmbed': {
+            'previewsInData': True,
+            'providers': [
+                'youtube',
+                'vimeo',
+                'dailymotion',
+                'spotify',
+                'instagram',
+                'twitter',
+                'flickr',
+                'facebook'
             ]
         },
         'fontSize': {
@@ -468,31 +403,31 @@ CKEDITOR_5_CONFIGS = {
                 'Verdana, Geneva, sans-serif'
             ]
         },
-        'alignment': {
-            'options': ['left', 'center', 'right', 'justify']
-        },
-        'link': {
-            'decorators': {
-                'openInNewTab': {
-                    'mode': 'manual',
-                    'label': 'Open in a new tab',
-                    'attributes': {
-                        'target': '_blank',
-                        'rel': 'noopener noreferrer'
-                    }
-                }
-            }
-        }
+        'language': 'en',
+        'blockToolbar': [
+            'paragraph', 'heading1', 'heading2', 'heading3',
+            '|',
+            'bulletedList', 'numberedList',
+            '|',
+            'blockQuote',
+            '|',
+            'insertTable',
+            '|',
+            'imageUpload',
+            '|',
+            'codeBlock',
+            'horizontalLine'
+        ],
+        'height': '500px',
+        'width': 'auto',
+        'removePlugins': [],
+        'extraPlugins': [],
     }
 }
 
 # CKEditor 5 Upload Settings
-CKEDITOR_5_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
+CKEDITOR_5_FILE_STORAGE = "django.core.files.storage.DefaultStorage"
 CKEDITOR_5_UPLOAD_PATH = "uploads/ckeditor5/"
-CKEDITOR_5_CUSTOM_CSS = "path/to/custom.css"  # Optional: Özel CSS dosyası eklemek isterseniz
 CKEDITOR_5_CONFIGS_PROXY = {
     'default': 'blogger.ckeditor5_configs.DefaultConfig'
 }
-
-# Media ve Upload ayarları için gerekli URL pattern'lerinin eklenmesi gerekiyor
-X_FRAME_OPTIONS = 'SAMEORIGIN'  # CKEditor iframe kullanımı için gerekli
