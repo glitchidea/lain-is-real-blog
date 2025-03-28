@@ -289,46 +289,18 @@ LOGGING = {
     },
 }
 
-# CKEditor Ayarları
-CKEDITOR_UPLOAD_PATH = "uploads/"
-CKEDITOR_IMAGE_BACKEND = "pillow"
-CKEDITOR_RESTRICT_BY_USER = True
-CKEDITOR_BROWSE_SHOW_DIRS = True
-CKEDITOR_ALLOW_NONIMAGE_FILES = False  # Sadece görsel yükleyebilmek için
-
 # Django CKEditor 5 Settings
-customColorPalette = [
-    {"color": "hsl(4, 90%, 58%)", "label": "Red"},
-    {"color": "hsl(340, 82%, 52%)", "label": "Pink"},
-    {"color": "hsl(291, 64%, 42%)", "label": "Purple"},
-    {"color": "hsl(262, 52%, 47%)", "label": "Deep Purple"},
-    {"color": "hsl(231, 48%, 48%)", "label": "Indigo"},
-    {"color": "hsl(207, 90%, 54%)", "label": "Blue"},
-    {"color": "hsl(199, 98%, 48%)", "label": "Light Blue"},
-    {"color": "hsl(187, 100%, 42%)", "label": "Cyan"},
-    {"color": "hsl(174, 100%, 29%)", "label": "Teal"},
-    {"color": "hsl(122, 39%, 49%)", "label": "Green"},
-    {"color": "hsl(88, 50%, 53%)", "label": "Light Green"},
-    {"color": "hsl(66, 70%, 54%)", "label": "Lime"},
-    {"color": "hsl(49, 98%, 60%)", "label": "Yellow"},
-    {"color": "hsl(45, 100%, 51%)", "label": "Amber"},
-    {"color": "hsl(36, 100%, 50%)", "label": "Orange"},
-    {"color": "hsl(14, 91%, 54%)", "label": "Deep Orange"},
-    {"color": "hsl(15, 25%, 34%)", "label": "Brown"},
-    {"color": "hsl(0, 0%, 62%)", "label": "Grey"},
-    {"color": "hsl(200, 18%, 46%)", "label": "Blue Grey"},
-    {"color": "hsl(200, 100%, 11%)", "label": "Dark Blue"},
-    {"color": "hsl(0, 0%, 0%)", "label": "Black"},
-    {"color": "hsl(0, 0%, 100%)", "label": "White"},
-]
-
 CKEDITOR_5_CONFIGS = {
     'default': {
         'toolbar': [
             'heading', '|',
-            'bold', 'italic', 'link', 'bulletedList', 'numberedList', '|',
+            'fontFamily', 'fontSize', 'fontColor', 'fontBackgroundColor', '|',
+            'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', '|',
+            'alignment', '|',
+            'bulletedList', 'numberedList', '|',
             'outdent', 'indent', '|',
-            'imageUpload', 'blockQuote', 'insertTable', 'mediaEmbed', '|',
+            'link', 'blockQuote', 'insertTable', 'imageUpload', 'mediaEmbed', '|',
+            'code', 'codeBlock', '|',
             'undo', 'redo', '|',
             'sourceEditing'
         ],
@@ -343,13 +315,35 @@ CKEDITOR_5_CONFIGS = {
         'image': {
             'toolbar': [
                 'imageTextAlternative', '|',
-                'imageStyle:alignLeft', 'imageStyle:alignCenter', 'imageStyle:alignRight', '|',
+                'imageStyle:inline',
+                'imageStyle:block',
+                'imageStyle:side',
                 'linkImage'
             ],
             'styles': [
-                'alignLeft', 'alignCenter', 'alignRight'
+                'full',
+                'alignLeft',
+                'alignCenter',
+                'alignRight'
             ],
-            'resizeUnit': 'px'
+            'resizeOptions': [
+                {
+                    'name': 'resizeImage:original',
+                    'value': None,
+                    'label': 'Original'
+                },
+                {
+                    'name': 'resizeImage:50',
+                    'value': '50',
+                    'label': '50%'
+                },
+                {
+                    'name': 'resizeImage:75',
+                    'value': '75',
+                    'label': '75%'
+                }
+            ],
+            'resizeUnit': '%'
         },
         'table': {
             'contentToolbar': [
@@ -378,18 +372,127 @@ CKEDITOR_5_CONFIGS = {
                 'Verdana, Geneva, sans-serif'
             ]
         },
-        'fontColor': {
-            'colors': customColorPalette
+        'alignment': {
+            'options': ['left', 'center', 'right', 'justify']
         },
-        'fontBackgroundColor': {
-            'colors': customColorPalette
+        'link': {
+            'decorators': {
+                'openInNewTab': {
+                    'mode': 'manual',
+                    'label': 'Open in a new tab',
+                    'attributes': {
+                        'target': '_blank',
+                        'rel': 'noopener noreferrer'
+                    }
+                }
+            }
+        }
+    },
+    'blog_content': {
+        'toolbar': [
+            'heading', '|',
+            'fontFamily', 'fontSize', 'fontColor', 'fontBackgroundColor', '|',
+            'bold', 'italic', 'underline', 'strikethrough', '|',
+            'alignment', '|',
+            'bulletedList', 'numberedList', '|',
+            'outdent', 'indent', '|',
+            'link', 'blockQuote', 'insertTable', 'imageUpload', 'mediaEmbed', '|',
+            'code', 'codeBlock', '|',
+            'undo', 'redo'
+        ],
+        'heading': {
+            'options': [
+                {'model': 'paragraph', 'title': 'Paragraph', 'class': 'ck-heading_paragraph'},
+                {'model': 'heading1', 'view': 'h1', 'title': 'Heading 1', 'class': 'ck-heading_heading1'},
+                {'model': 'heading2', 'view': 'h2', 'title': 'Heading 2', 'class': 'ck-heading_heading2'},
+                {'model': 'heading3', 'view': 'h3', 'title': 'Heading 3', 'class': 'ck-heading_heading3'}
+            ]
         },
+        'image': {
+            'toolbar': [
+                'imageTextAlternative', '|',
+                'imageStyle:inline',
+                'imageStyle:block',
+                'imageStyle:side',
+                'linkImage'
+            ],
+            'styles': [
+                'full',
+                'alignLeft',
+                'alignCenter',
+                'alignRight'
+            ],
+            'resizeOptions': [
+                {
+                    'name': 'resizeImage:original',
+                    'value': None,
+                    'label': 'Original'
+                },
+                {
+                    'name': 'resizeImage:50',
+                    'value': '50',
+                    'label': '50%'
+                },
+                {
+                    'name': 'resizeImage:75',
+                    'value': '75',
+                    'label': '75%'
+                }
+            ],
+            'resizeUnit': '%'
+        },
+        'table': {
+            'contentToolbar': [
+                'tableColumn',
+                'tableRow',
+                'mergeTableCells',
+                'tableProperties',
+                'tableCellProperties'
+            ]
+        },
+        'fontSize': {
+            'options': [
+                9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 25, 27, 29, 31, 33, 35
+            ]
+        },
+        'fontFamily': {
+            'options': [
+                'default',
+                'Arial, Helvetica, sans-serif',
+                'Courier New, Courier, monospace',
+                'Georgia, serif',
+                'Lucida Sans Unicode, Lucida Grande, sans-serif',
+                'Tahoma, Geneva, sans-serif',
+                'Times New Roman, Times, serif',
+                'Trebuchet MS, Helvetica, sans-serif',
+                'Verdana, Geneva, sans-serif'
+            ]
+        },
+        'alignment': {
+            'options': ['left', 'center', 'right', 'justify']
+        },
+        'link': {
+            'decorators': {
+                'openInNewTab': {
+                    'mode': 'manual',
+                    'label': 'Open in a new tab',
+                    'attributes': {
+                        'target': '_blank',
+                        'rel': 'noopener noreferrer'
+                    }
+                }
+            }
+        }
     }
 }
 
 # CKEditor 5 Upload Settings
 CKEDITOR_5_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
 CKEDITOR_5_UPLOAD_PATH = "uploads/ckeditor5/"
+CKEDITOR_5_CUSTOM_CSS = "path/to/custom.css"  # Optional: Özel CSS dosyası eklemek isterseniz
 CKEDITOR_5_CONFIGS_PROXY = {
     'default': 'blogger.ckeditor5_configs.DefaultConfig'
 }
+
+# Media ve Upload ayarları için gerekli URL pattern'lerinin eklenmesi gerekiyor
+X_FRAME_OPTIONS = 'SAMEORIGIN'  # CKEditor iframe kullanımı için gerekli
